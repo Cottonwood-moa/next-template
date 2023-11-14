@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+# 커밋 시작 메시지 출력
 cat << "EOF"
   ____                          _ _   
  / ___|___  _ __ ___  _ __ ___ (_) |_ 
@@ -7,5 +7,6 @@ cat << "EOF"
 | |__| (_) | | | | | | | | | | | | |_ 
  \____\___/|_| |_| |_|_| |_| |_|_|\__|
 EOF
+. "$(dirname -- "$0")/_/husky.sh"
 npm run lint
 npx lint-staged
