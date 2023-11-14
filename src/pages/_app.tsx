@@ -4,6 +4,7 @@ import { ThemeProvider } from '@material-tailwind/react';
 import { RecoilRoot } from 'recoil';
 
 export default function App({ Component, pageProps }: AppProps) {
+  console.log('husky');
   return (
     <RecoilRoot>
       <ThemeProvider>
