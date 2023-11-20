@@ -3,11 +3,13 @@ import { Inter } from 'next/font/google';
 import Button from '@/components/material-tailwind/Button';
 import ButtonGroup from '@/components/material-tailwind/ButtonGroup';
 import Pagination from '@/components/material-tailwind/Pagination';
+import Breadcrumbs from '@/components/material-tailwind/Breadcrumbs';
 import { useEffect, useState } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
+  /* paginator */
   const [active, setActive] = useState(1);
   const [pageData, setPageData] = useState<{ data: unknown[]; total: number }>({
     data: [],
@@ -21,10 +23,22 @@ export default function Home() {
     mockFetch();
   }, []);
 
+  /* breadCrumbs */
+  const breadCrumbs = [
+    {
+      url: '/',
+      label: 'Home',
+    },
+    {
+      url: '/about',
+      label: 'About',
+    },
+  ];
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
+      <Breadcrumbs link={breadCrumbs} />
       <Button>테스트</Button>
       <ButtonGroup>
         <Button>테스트</Button>
