@@ -1,11 +1,12 @@
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 
-export const test = atom({
-  key: 'test',
-  default: false,
+export const alertStore = atom({
+  key: 'alertStore',
+  default: [] as unknown[],
 });
 
-export const test2 = atom({
-  key: 'test2',
-  default: 1,
+export const alertStoreSelector = selector({
+  key: 'alertStoreSelector',
+  get: ({ get }) => ({ ...get(alertStore) }),
+  set: ({ set }, newValue) => set(alertStore, newValue),
 });

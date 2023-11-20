@@ -1,14 +1,17 @@
+'use client;';
+
 import '@/styles/globals.scss';
 import type { AppProps } from 'next/app';
-import { ThemeProvider } from '@material-tailwind/react';
+import { useEffect } from 'react';
 import { RecoilRoot } from 'recoil';
 
 export default function App({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    import('preline');
+  }, []);
   return (
     <RecoilRoot>
-      <ThemeProvider>
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <Component {...pageProps} />
     </RecoilRoot>
   );
 }

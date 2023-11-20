@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",
-    "@material-tailwind/react": "^2.1.4",
+    "framer-motion": "^10.16.5",
     "lodash": "^4.17.21",
     "next": "14.0.2",
     "react": "^18",
