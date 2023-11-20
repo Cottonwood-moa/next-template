@@ -7,7 +7,7 @@ interface AvatarItem extends MuiAvatarProps {
   src: string;
   alt: string;
 }
-interface AvatarProps extends MuiAvatarProps {
+interface AvatarProps {
   avatar: AvatarItem;
 }
 export default function Avatar({ avatar }: AvatarProps) {
