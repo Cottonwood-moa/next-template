@@ -5,6 +5,8 @@ import ButtonGroup from '@/components/material-tailwind/ButtonGroup';
 import Pagination from '@/components/material-tailwind/Pagination';
 import Breadcrumbs from '@/components/material-tailwind/Breadcrumbs';
 import { useEffect, useState } from 'react';
+import Avatar from '@/components/material-tailwind/Avatar';
+import { size as avatarSize } from '@material-tailwind/react/types/components/avatar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -34,10 +36,17 @@ export default function Home() {
       label: 'About',
     },
   ];
+  /* Avatar */
+  const avatar = {
+    src: 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80',
+    alt: 'avatar',
+    size: 'sm' as avatarSize,
+  };
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
+      <Avatar avatar={avatar} />
       <Breadcrumbs link={breadCrumbs} />
       <Button>테스트</Button>
       <ButtonGroup>
