@@ -10,42 +10,67 @@ import {
 
 interface PaginationProps {
   total: number;
-  // maxVisible?: number;
   active: number;
   setActive: Dispatch<SetStateAction<number>>;
 }
-
+/**
+ * @param {PaginationProps} props
+ * @returns {JSX.Element}
+ * @description 페이지네이션 컴포넌트
+ * 전체 컨텐츠의 total 값, 현재 페이지 number, 현재 페이지 set 함수가 필요합니다.
+ */
 export default function Pagination({
   total,
-  // maxVisible,
   active,
   setActive,
 }: PaginationProps) {
   const [buttons, setButtons] = useState<number[]>([]);
 
+  /**
+   * @description 다음 버튼
+   */
   const next = () => {
     if (active === total) return;
-
     setActive(active + 1);
   };
 
+  /**
+   * @description 이전 버튼
+   */
   const prev = () => {
     if (active === 1) return;
-
     setActive(active - 1);
   };
 
-  const makeButtons = useCallback(() => {
+  /**
+   * @description 페이지 번호 생성
+   */
+  const makePageNumber = useCallback(() => {
     const arrayFromTotal = Array.from(
       { length: total },
       (_, index) => index + 1,
     );
-    setButtons(arrayFromTotal);
-  }, [total]);
+
+    if (arrayFromTotal.length <= 5) {
+      setButtons(arrayFromTotal);
+      return;
+    }
+    if ([1, 2, 3].includes(active)) {
+      setButtons([1, 2, 3, 4, 5]);
+      return;
+    }
+
+    if ([total - 2, total - 1, total].includes(active)) {
+      setButtons([total - 4, total - 3, total - 2, total - 1, total]);
+      return;
+    }
+
+    setButtons([active - 2, active - 1, active, active + 1, active + 2]);
+  }, [total, active]);
 
   useEffect(() => {
-    makeButtons();
-  }, [active, makeButtons]);
+    makePageNumber();
+  }, [active, makePageNumber]);
 
   return (
     <div className="flex items-center gap-4">
@@ -61,7 +86,9 @@ export default function Pagination({
         {buttons.map((number) => (
           <IconButton
             key={number}
-            variant={active === number ? 'filled' : 'text'}
+            variant="text"
+            ripple={false}
+            className={active === number ? 'text-lg font-bold' : ''}
             color="gray"
             onClick={() => setActive(number)}
           >
@@ -73,7 +100,7 @@ export default function Pagination({
         variant="text"
         className="flex items-center gap-2"
         onClick={next}
-        disabled={active === 5}
+        disabled={active === total}
       >
         Next
         <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
@@ -81,7 +108,3 @@ export default function Pagination({
     </div>
   );
 }
-
-/* Pagination.defaultProps = {
-  maxVisible: 5,
-}; */

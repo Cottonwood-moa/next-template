@@ -3,12 +3,23 @@ import { Inter } from 'next/font/google';
 import Button from '@/components/material-tailwind/Button';
 import ButtonGroup from '@/components/material-tailwind/ButtonGroup';
 import Pagination from '@/components/material-tailwind/Pagination';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   const [active, setActive] = useState(1);
+  const [pageData, setPageData] = useState<{ data: unknown[]; total: number }>({
+    data: [],
+    total: 0,
+  });
+  const mockFetch = () => {
+    setPageData({ data: [1, 2, 3, 4, 5], total: 10 });
+  };
+
+  useEffect(() => {
+    mockFetch();
+  }, []);
 
   return (
     <main
@@ -22,7 +33,11 @@ export default function Home() {
         <Button>테스트</Button>
       </ButtonGroup>
 
-      <Pagination total={5} active={active} setActive={setActive} />
+      <Pagination
+        total={pageData.total}
+        active={active}
+        setActive={setActive}
+      />
 
       <div className="font-mono z-10 w-full max-w-5xl items-center justify-between text-sm lg:flex">
         <p className="from-zinc-200 dark:border-neutral-800 dark:bg-zinc-800/30 lg:dark:bg-zinc-800/30 fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b pb-6 pt-8 backdrop-blur-2xl dark:from-inherit lg:static  lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4">
