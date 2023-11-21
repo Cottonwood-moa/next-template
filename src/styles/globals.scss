@@ -15,7 +15,9 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
-
+html {
+  overflow: hidden;
+}
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -24,4 +26,21 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+// 스크롤바 전체
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background: lightgray;
+}
+
+//스크롤 막대
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: gray;
+}
+
+// 스크롤 막대 외부
+::-webkit-scrollbar-track {
 }
