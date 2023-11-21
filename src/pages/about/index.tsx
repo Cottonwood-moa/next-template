@@ -8,7 +8,7 @@ const About: NextPage = () => {
     // eslint-disable-next-line no-console
     console.log('하이킥 router', router);
   }, [router]);
-  return <div className="text-red-500">About test</div>;
+  return <div className="h-[100vh] w-[100vw]" />;
 };
 
 export default About;
