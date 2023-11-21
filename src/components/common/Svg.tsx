@@ -2,10 +2,11 @@ import { twMerge } from 'tailwind-merge';
 
 interface SvgProps {
   type: string;
+  color?: string;
   className?: string;
 }
 
-export default function Svg({ type, className }: SvgProps) {
+export default function Svg({ type, color = 'white', className }: SvgProps) {
   return (
     <>
       {type === 'icon-sun' && (
@@ -14,8 +15,8 @@ export default function Svg({ type, className }: SvgProps) {
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth="1.5"
-          stroke="currentColor"
-          className={twMerge('h-8 w-8', className)}
+          stroke={color}
+          className={twMerge('h-6 w-6', className)}
         >
           <path
             strokeLinecap="round"
@@ -31,8 +32,8 @@ export default function Svg({ type, className }: SvgProps) {
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth="1.5"
-          stroke="currentColor"
-          className={twMerge('h-8 w-8', className)}
+          stroke={color}
+          className={twMerge('h-6 w-6', className)}
         >
           <path
             strokeLinecap="round"
@@ -48,7 +49,7 @@ export default function Svg({ type, className }: SvgProps) {
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth="1.5"
-          stroke="currentColor"
+          stroke={color}
           className="h-6 w-6"
         >
           <path
