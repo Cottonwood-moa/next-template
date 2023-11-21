@@ -44,7 +44,9 @@
         "leadingUnderscore": "require"
       }
     ],
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "jsx-a11y/no-noninteractive-tabindex": "off"
   },
   "ignorePatterns": [
     "next.config.js",
