@@ -10,6 +10,8 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@fontsource/gugi": "^5.0.16",
+    "@fontsource/noto-sans-kr": "^5.0.16",
     "@heroicons/react": "^2.0.18",
     "framer-motion": "^10.16.5",
     "lodash": "^4.17.21",
