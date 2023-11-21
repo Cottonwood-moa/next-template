@@ -50,7 +50,7 @@ export default function MainHeader({ theme, setTheme }: MainHeaderProps) {
   };
 
   return (
-    <div className="flex items-center justify-between bg-warning-content pb-1 pl-3 pr-3 pt-1">
+    <div className="flex items-center justify-between bg-black pb-1 pl-3 pr-3 pt-1">
       {/* 왼쪽 컨텐츠 */}
       <div />
       {/* 오른쪽 컨텐츠 */}
