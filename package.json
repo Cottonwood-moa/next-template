@@ -4,8 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "build:dev": "env-cmd -f ./.env.dev next build",
+    "build:prod": "env-cmd -f ./.env.prod next build",
+    "start:dev": "env-cmd -f ./.env.dev next start",
+    "start:prod": "env-cmd -f ./.env.prod next start",
     "lint": "next lint",
     "prepare": "husky install"
   },
@@ -13,6 +15,7 @@
     "@fontsource/gugi": "^5.0.16",
     "@fontsource/noto-sans-kr": "^5.0.16",
     "@heroicons/react": "^2.0.18",
+    "env-cmd": "^10.1.0",
     "framer-motion": "^10.16.5",
     "lodash": "^4.17.21",
     "next": "14.0.2",
