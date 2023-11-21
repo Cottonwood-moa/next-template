@@ -19,7 +19,8 @@
     "react-hook-form": "^7.48.2",
     "recoil": "^0.7.7",
     "sass": "^1.69.5",
-    "swr": "^2.2.4"
+    "swr": "^2.2.4",
+    "tailwind-merge": "^2.0.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.201",
@@ -29,6 +30,7 @@
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
     "autoprefixer": "^10.0.1",
+    "daisyui": "^4.4.2",
     "eslint": "^8",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.1.0",
