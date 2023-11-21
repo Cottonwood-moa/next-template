@@ -7,10 +7,10 @@ const Template: NextPage = () => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   return (
     <MainLayout>
-      <div className="h-full min-h-[100vh] w-full">
+      <div className="h-full min-h-[100vh] w-full overflow-y-auto">
         <button
           type="button"
-          className="btn"
+          className="btn font-gugi"
           onClick={() => dialogRef?.current?.showModal()}
         >
           open modal
