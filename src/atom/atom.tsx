@@ -1,14 +1,14 @@
 import commonUtil from '@/utils/commonUtil';
 import { atom, selector } from 'recoil';
 
+/**
+ * @description Alert Store
+ */
 export interface AlertProps {
   id?: string;
   message: string;
   life?: number;
 }
-/**
- * @description Alert Store
- */
 export const alertStore = atom({
   key: `alertStore_${commonUtil.randomString(12)}`,
   default: [] as AlertProps[],
@@ -31,10 +31,8 @@ export const alertFireSelector = selector<AlertProps[]>({
     set(alertStore, [...alert, ...newAlertWithId]);
   },
 });
-/**
- * @description Dialog Store
- */
-export const dialogStore = atom({
-  key: `dialogStore_${commonUtil.randomString(12)}`,
-  default: [] as AlertProps[],
+
+export const loadingStore = atom({
+  key: `loadingStore_${commonUtil.randomString(12)}`,
+  default: false,
 });

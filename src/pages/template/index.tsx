@@ -1,14 +1,14 @@
-import { alertFireSelector, alertStore } from '@/atom/atom';
+import { alertFireSelector, loadingStore } from '@/atom/atom';
 import Dialog from '@/components/common/Dialog';
 import MainLayout from '@/components/layouts/MainLayout';
 import commonUtil from '@/utils/commonUtil';
 import { NextPage } from 'next';
 import { useRef } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
 const Template: NextPage = () => {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [alert, setAlert] = useRecoilState(alertStore);
+  const setLoading = useSetRecoilState(loadingStore);
   const alertFire = useSetRecoilState(alertFireSelector);
   const addTest = () => {
     alertFire([
@@ -18,13 +18,10 @@ const Template: NextPage = () => {
       },
     ]);
   };
-  const removeTest = () => {
-    const removedTest = alert.slice(1);
-    setAlert(removedTest);
-  };
+
   return (
     <MainLayout>
-      <div className="h-full min-h-[100vh] w-full overflow-y-auto">
+      <div className="flex h-full min-h-[100vh] w-full gap-2 overflow-y-auto">
         <button
           type="button"
           className="btn font-gugi"
@@ -33,10 +30,19 @@ const Template: NextPage = () => {
           open modal
         </button>
         <button type="button" className="btn" onClick={addTest}>
-          추가
+          Alert 추가
         </button>
-        <button type="button" className="btn" onClick={removeTest}>
-          삭제
+        <button
+          type="button"
+          className="btn"
+          onClick={() => {
+            setLoading(true);
+            setTimeout(() => {
+              setLoading(false);
+            }, 2000);
+          }}
+        >
+          Loading on/off
         </button>
         <Dialog ref={dialogRef} header="Dialog">
           테스트
