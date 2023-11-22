@@ -11,6 +11,7 @@ export default function PageLoading() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={{ duration: 0.1 }}
           className="fixed z-10 flex h-[100vh] w-[100vw] items-center justify-center bg-black bg-opacity-20"
         >
           <span className="loading loading-ring w-16" />
