@@ -2,25 +2,18 @@ import React, { forwardRef } from 'react';
 import { motion, HTMLMotionProps } from 'framer-motion';
 
 type PageTransitionProps = HTMLMotionProps<'div'>;
-type PageTransitionRef = React.ForwardedRef<HTMLDivElement>;
 
-function PageTransition(
-  { children, ...rest }: PageTransitionProps,
-  ref: PageTransitionRef,
-) {
-  const onTheRight = { x: '100%' };
-  const inTheCenter = { x: 0 };
-  const onTheLeft = { x: '-100%' };
-
-  const transition = { duration: 2, ease: 'easeInOut' };
-
+function PageTransition({ children, ...rest }: PageTransitionProps) {
   return (
     <motion.div
-      ref={ref}
-      initial={onTheRight}
-      animate={inTheCenter}
-      exit={onTheLeft}
-      transition={transition}
+      initial={{ x: 300, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: 300, opacity: 0 }}
+      transition={{
+        type: 'spring',
+        stiffness: 260,
+        damping: 20,
+      }}
       {...rest}
     >
       {children}
