@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { capitalize } from 'lodash';
+import { useEffect } from 'react';
 import Svg from '../common/Svg';
 
 interface MainHeaderProps {
@@ -48,6 +49,12 @@ export default function MainHeader({ theme, setTheme }: MainHeaderProps) {
   const onClickSelectTheme = (newTheme: string) => {
     setTheme(newTheme);
   };
+
+  useEffect(() => {
+    if (!theme) {
+      setTheme('light');
+    }
+  }, [theme, setTheme])
 
   return (
     <div className="flex items-center justify-between bg-black pb-1 pl-3 pr-3 pt-1">

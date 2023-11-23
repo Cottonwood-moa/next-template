@@ -1,0 +1,31 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "첫 번째 post",
+      "content": "post 내용"
+    },
+    {
+      "id": "47",
+      "title": "87 post",
+      "content": "post 내용"
+    }
+  ],
+  "users": [
+    {
+      "name": "Cottonwood",
+      "gender": "male",
+      "id": 1
+    },
+    {
+      "name": "moa",
+      "gender": "male",
+      "id": 2
+    },
+    {
+      "name": "earlyBird",
+      "gender": "male",
+      "id": 3
+    }
+  ]
+}

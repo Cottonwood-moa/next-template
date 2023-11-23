@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import { motion, HTMLMotionProps } from 'framer-motion';
 
 type PageTransitionProps = HTMLMotionProps<'div'>;
@@ -21,4 +21,4 @@ function PageTransition({ children, ...rest }: PageTransitionProps) {
   );
 }
 
-export default forwardRef(PageTransition);
+export default PageTransition;
