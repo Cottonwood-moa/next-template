@@ -1,14 +1,48 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { capitalize } from 'lodash';
-import { useEffect } from 'react';
 import Svg from '../common/Svg';
+
+export type DaisyUiTheme =
+  | 'light'
+  | 'dark'
+  | 'cupcake'
+  | 'bumblebee'
+  | 'emerald'
+  | 'corporate'
+  | 'synthwave'
+  | 'retro'
+  | 'cyberpunk'
+  | 'valentine'
+  | 'halloween'
+  | 'garden'
+  | 'forest'
+  | 'aqua'
+  | 'lofi'
+  | 'pastel'
+  | 'fantasy'
+  | 'wireframe'
+  | 'black'
+  | 'luxury'
+  | 'dracula'
+  | 'cmyk'
+  | 'autumn'
+  | 'business'
+  | 'acid'
+  | 'lemonade'
+  | 'night'
+  | 'coffee'
+  | 'winter'
+  | 'dim'
+  | 'nord'
+  | 'sunset';
 
 interface MainHeaderProps {
   theme: string;
-  setTheme: (theme: string) => void;
+  setTheme: (theme: DaisyUiTheme) => void;
 }
+
 export default function MainHeader({ theme, setTheme }: MainHeaderProps) {
-  const daisyUiThemeList = [
+  const daisyUiThemeList: DaisyUiTheme[] = [
     'light',
     'dark',
     'cupcake',
@@ -46,15 +80,9 @@ export default function MainHeader({ theme, setTheme }: MainHeaderProps) {
    * @param {string} newTheme
    * @description theme 변경 이벤트
    */
-  const onClickSelectTheme = (newTheme: string) => {
+  const onClickSelectTheme = (newTheme: DaisyUiTheme) => {
     setTheme(newTheme);
   };
-
-  useEffect(() => {
-    if (!theme) {
-      setTheme('light');
-    }
-  }, [theme, setTheme]);
 
   return (
     <div className="flex items-center justify-between bg-black pb-1 pl-3 pr-3 pt-1">
