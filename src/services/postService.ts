@@ -25,25 +25,6 @@ export function useGetPost(
 }
 
 /**
- * @description mock post list
- */
-export function useGetMockPost() {
-  const requestUrl = 'https://dummyjson.com/posts';
-  const { data, error, mutate } = useSWR<unknown>(
-    [requestUrl],
-    commonRequestGet,
-  );
-  return { data, isLoading: !data && !error, mutate };
-}
-
-/**
- */
-export function usePostMockPost() {
-  const { data, isLoading, mutation} = useMutation<any>('http://localhost:4000/posts', commonRequestPost);
-  return { data, isLoading, mutation };
-}
-
-/**
  * @param {{id: string}} paths 경로에 들어갈 요청 값
  * @returns 포스트 상세 정보를 반환한다.
  */
