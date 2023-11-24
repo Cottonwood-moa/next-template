@@ -3,6 +3,7 @@ import { motion, AnimatePresence, Reorder } from 'framer-motion';
 import { useRecoilState } from 'recoil';
 import { useEffect, useState } from 'react';
 import { isEmpty } from 'lodash';
+import { twMerge } from 'tailwind-merge';
 
 export default function Alert() {
   const [alert, setAlert] = useRecoilState(alertStore);
@@ -32,12 +33,22 @@ export default function Alert() {
           {alertState.map((item) => (
             <Reorder.Item key={item.id} value={item}>
               <motion.div
-                className="alert alert-info flex h-auto w-[300px] justify-between whitespace-pre-wrap"
+                className={twMerge(
+                  `alert flex h-auto w-[300px] justify-between whitespace-pre-wrap`,
+                  item?.type && `alert-${item.type}`,
+                )}
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
               >
-                <div className="font-bold text-base-100">{item.message}</div>
+                <div
+                  className={twMerge(
+                    'font-bold text-base-100',
+                    !item?.type && 'text-accent-content',
+                  )}
+                >
+                  {item.message}
+                </div>
               </motion.div>
             </Reorder.Item>
           ))}
