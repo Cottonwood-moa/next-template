@@ -4,6 +4,7 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 
+// TODO 알맞게 변경 필요
 export interface ApiResponse<T = unknown> {
   code: number;
   http_status_code: number;
@@ -12,6 +13,7 @@ export interface ApiResponse<T = unknown> {
   version: string;
 }
 
+// TODO 알맞게 변경 필요
 export interface ApiErrorResponse {
   error: boolean;
   error_code: number;
