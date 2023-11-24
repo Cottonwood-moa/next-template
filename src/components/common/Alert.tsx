@@ -4,6 +4,7 @@ import { useRecoilState } from 'recoil';
 import { useEffect, useState } from 'react';
 import { isEmpty } from 'lodash';
 import { twMerge } from 'tailwind-merge';
+import Svg from './Svg';
 
 export default function Alert() {
   const [alert, setAlert] = useRecoilState(alertStore);
@@ -35,7 +36,6 @@ export default function Alert() {
               <motion.div
                 className={twMerge(
                   `alert flex h-auto w-[300px] justify-between whitespace-pre-wrap`,
-                  item?.type && `alert-${item.type}`,
                 )}
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -43,11 +43,14 @@ export default function Alert() {
               >
                 <div
                   className={twMerge(
-                    'font-bold text-base-100',
+                    'flex items-center font-bold text-base-content',
                     !item?.type && 'text-accent-content',
                   )}
                 >
-                  {item.message}
+                  <span className={twMerge('mr-2', `text-${item.type}`)}>
+                    <Svg type={`icon-${item?.type}`} />
+                  </span>
+                  <span>{item.message}</span>
                 </div>
               </motion.div>
             </Reorder.Item>

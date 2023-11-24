@@ -8,7 +8,7 @@ export interface AlertProps {
   id?: string;
   message: string;
   life?: number;
-  type?: 'info' | 'success' | 'warning' | 'error';
+  type: 'info' | 'success' | 'warning' | 'error';
 }
 export const alertStore = atom({
   key: `alertStore_${commonUtil.randomString(12)}`,
@@ -28,7 +28,7 @@ export const alertFireSelector = selector<AlertProps[]>({
       ...alertItem,
       id: commonUtil.randomString(12),
       life: alertItem.life || 1200,
-      type: alertItem?.type,
+      type: alertItem.type,
     }));
     set(alertStore, [...alert, ...newAlertWithId]);
   },
