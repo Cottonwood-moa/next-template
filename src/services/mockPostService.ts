@@ -39,9 +39,9 @@ export interface MockAddPostBody {
 /**
  * @description mock post list
  */
-export function useGetMockPost() {
+export function useGetMockPost(params: { test: string }) {
   const { data, error, mutate } = useSWR<MockPostResponse, AxiosError<unknown>>(
-    `${process.env.NEXT_PUBLIC_DUMMY}/posts`,
+    `${process.env.NEXT_PUBLIC_DUMMY}/posts?test=${params.test}`,
     commonRequestGet,
   );
   return {

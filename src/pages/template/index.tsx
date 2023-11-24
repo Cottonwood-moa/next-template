@@ -4,7 +4,7 @@ import Dialog from '@/components/common/Dialog';
 import MainLayout from '@/components/layouts/MainLayout';
 import commonUtil from '@/utils/commonUtil';
 import { NextPage } from 'next';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { useRouter } from 'next/router';
 import PageTransition from '@/components/layouts/PageTransition';
@@ -13,10 +13,13 @@ import {
   useGetMockPost,
   usePostMockPost,
 } from '@/services/mockPostService';
+import PostCard from '@/components/common/PostCard';
+import Tooltip from '@/components/common/Tooltip';
 
 const Template: NextPage = () => {
   const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const [test, setTest] = useState('테스트');
   const alertFire = useSetRecoilState(alertFireSelector);
   const setLoading = useSetRecoilState(loadingStore);
   /**
@@ -26,7 +29,7 @@ const Template: NextPage = () => {
     data: postResponse,
     isLoading: _postListLoading,
     mutate: getPost,
-  } = useGetMockPost();
+  } = useGetMockPost({ test });
 
   /**
    * @description add post (post)
@@ -118,7 +121,7 @@ const Template: NextPage = () => {
   return (
     <MainLayout>
       <PageTransition>
-        <div className="flex h-full min-h-[100vh] w-full gap-2 overflow-y-auto">
+        <div className="h-full min-h-[100vh] w-full gap-2 overflow-y-auto">
           <button type="button" className="btn" onClick={handleClick}>
             /
           </button>
@@ -157,9 +160,24 @@ const Template: NextPage = () => {
           <button type="button" className="btn" onClick={postRequest}>
             post
           </button>
+          <button
+            type="button"
+            className="btn"
+            onClick={() => setTest(commonUtil.randomString(12))}
+          >
+            test
+          </button>
+          <div className="flex gap-12">
+            <Tooltip>
+              <button type="button" className="btn">
+                tooltip
+              </button>
+            </Tooltip>
+          </div>
           <Dialog ref={dialogRef} header="Dialog">
             테스트
           </Dialog>
+          {/* <PostCard /> */}
         </div>
       </PageTransition>
     </MainLayout>
