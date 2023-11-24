@@ -13,8 +13,8 @@ import {
   useGetMockPost,
   usePostMockPost,
 } from '@/services/mockPostService';
-import PostCard from '@/components/common/PostCard';
-import Tooltip from '@/components/common/Tooltip';
+import ReactTooltip from 'react-tooltip';
+import useIsMounted from '@/hooks/useIsMounted';
 
 const Template: NextPage = () => {
   const router = useRouter();
@@ -22,6 +22,7 @@ const Template: NextPage = () => {
   const [test, setTest] = useState('테스트');
   const alertFire = useSetRecoilState(alertFireSelector);
   const setLoading = useSetRecoilState(loadingStore);
+  const isMounted = useIsMounted();
   /**
    * @description post list (get)
    */
@@ -167,13 +168,7 @@ const Template: NextPage = () => {
           >
             test
           </button>
-          <div className="flex gap-12">
-            <Tooltip>
-              <button type="button" className="btn">
-                tooltip
-              </button>
-            </Tooltip>
-          </div>
+          <ReactTooltip type="error">tooltip</ReactTooltip>
           <Dialog ref={dialogRef} header="Dialog">
             테스트
           </Dialog>
