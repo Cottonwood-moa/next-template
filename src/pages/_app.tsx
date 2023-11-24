@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <SWRConfig>
       <RecoilRoot>
-        <div data-theme={value}>
+        <div data-theme={value || 'light'}>
           <AnimatePresence mode="wait" initial={false}>
             <Component {...pageProps} key={router.asPath} />
           </AnimatePresence>

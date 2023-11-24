@@ -8,15 +8,13 @@ interface MainLayoutProps {
 }
 export default function MainLayout({ children }: MainLayoutProps) {
   const [theme, setTheme] = useLocalStorageWithSync('theme');
-
-  const setThemeFn = (newTheme: string) => {
-    setTheme(newTheme);
-  };
-
   return (
     <>
       <PageLoading />
-      <MainHeader theme={theme} setTheme={setThemeFn} />
+      <MainHeader
+        theme={theme || 'light'}
+        setTheme={(newTheme: string) => setTheme(newTheme)}
+      />
       <div className="h-full overflow-y-auto p-4">{children}</div>
       <Alert />
     </>
