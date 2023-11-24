@@ -35,9 +35,9 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => response,
+  // 공통 에러코드 처리
   async (error: AxiosError) => {
     const apiErrorRes = error.response?.data as ApiErrorResponse;
-
     if (apiErrorRes?.error) {
       switch (apiErrorRes.http_status_code) {
         case 200:
