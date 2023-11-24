@@ -1,4 +1,4 @@
-import { AlertProps, alertStore } from '@/atom/atom';
+import { AlertProps, alertStore } from '@/atom/alertAtom';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
 import { useRecoilState } from 'recoil';
 import { useEffect, useState } from 'react';

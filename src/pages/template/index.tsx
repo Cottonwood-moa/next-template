@@ -1,19 +1,47 @@
-import { alertFireSelector, loadingStore } from '@/atom/atom';
+import { loadingStore } from '@/atom/atom';
+import { alertFireSelector } from '@/atom/alertAtom';
 import Dialog from '@/components/common/Dialog';
 import MainLayout from '@/components/layouts/MainLayout';
 import commonUtil from '@/utils/commonUtil';
 import { NextPage } from 'next';
-import { useRef, useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { useRouter } from 'next/router';
 import PageTransition from '@/components/layouts/PageTransition';
+import {
+  MockPostResponse,
+  useGetMockPost,
+  usePostMockPost,
+} from '@/services/mockPostService';
 
 const Template: NextPage = () => {
   const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const setLoading = useSetRecoilState(loadingStore);
   const alertFire = useSetRecoilState(alertFireSelector);
-  const addTest = () => {
+  const setLoading = useSetRecoilState(loadingStore);
+  /**
+   * @description post list (get)
+   */
+  const {
+    data: postResponse,
+    isLoading: _postListLoading,
+    mutate: getPost,
+  } = useGetMockPost();
+
+  /**
+   * @description add post (post)
+   */
+  const {
+    data: addPostRes,
+    error,
+    isLoading: _addPostLoading,
+    mutation: addPost,
+  } = usePostMockPost();
+
+  /**
+   * @description add Alert Event handler
+   */
+  const addAlert = () => {
     alertFire([
       {
         message: `${commonUtil.getRandomEmoji()}동해물과 백두산이 마르고 삼천이 보전하세.`,
@@ -21,12 +49,55 @@ const Template: NextPage = () => {
       },
     ]);
   };
+
+  /**
+   * @description go to home
+   */
   const handleClick = () => {
     router.push('/');
   };
+
+  /**
+   * @description go to post
+   */
   const onClickPost = () => {
     router.push('/post/1');
   };
+
+  /**
+   * @description add Post Event handler
+   */
+  const postRequest = () => {
+    const newPost = {
+      userId: commonUtil.randomNumber(2),
+      title: `${commonUtil.randomNumber(2)} post`,
+      body: 'post 내용',
+    };
+    addPost(newPost);
+  };
+
+  /**
+   * @description add Post result detector
+   */
+  useEffect(() => {
+    if (error) {
+      alertFire([
+        {
+          message: '포스트 등록 요청 중 에러가 발생했습니다.',
+          type: 'error',
+        },
+      ]);
+    }
+
+    if (addPostRes) {
+      alertFire([
+        {
+          message: '포스트를 등록하였습니다.',
+          type: 'info',
+        },
+      ]);
+    }
+  }, [addPostRes, error, alertFire]);
 
   return (
     <MainLayout>
@@ -45,7 +116,7 @@ const Template: NextPage = () => {
           >
             open modal
           </button>
-          <button type="button" className="btn" onClick={addTest}>
+          <button type="button" className="btn" onClick={addAlert}>
             Alert 추가
           </button>
           <button
@@ -59,6 +130,16 @@ const Template: NextPage = () => {
             }}
           >
             Loading on/off
+          </button>
+          <button
+            type="button"
+            className="btn"
+            onClick={() => getPost({ ...(postResponse as MockPostResponse) })}
+          >
+            mutate
+          </button>
+          <button type="button" className="btn" onClick={postRequest}>
+            post
           </button>
           <Dialog ref={dialogRef} header="Dialog">
             테스트

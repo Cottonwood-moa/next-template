@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import useMutation from '@/hooks/useMutation';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { commonRequestGet, commonRequestPost } from './axios/axiosRequest';
 
 export interface MockPostResponse {
@@ -41,12 +41,12 @@ export interface MockAddPostBody {
  */
 export function useGetMockPost() {
   const { data, error, mutate } = useSWR<MockPostResponse, AxiosError<unknown>>(
-    'https://dummyjson.com/posts',
+    `${process.env.NEXT_PUBLIC_DUMMY}/posts`,
     commonRequestGet,
   );
   return {
     data,
-    error: error?.response as AxiosResponse,
+    error: error?.response,
     isLoading: !data && !error,
     mutate,
   };
@@ -60,6 +60,6 @@ export function usePostMockPost() {
     MockAddPostResponse,
     MockAddPostError,
     MockAddPostBody
-  >('https://dummyjson.com/posts/add', commonRequestPost);
+  >(`${process.env.NEXT_PUBLIC_DUMMY}/posts/add`, commonRequestPost);
   return { data, error, isLoading, mutation };
 }

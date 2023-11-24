@@ -46,8 +46,6 @@ axiosInstance.interceptors.response.use(
           break;
         case 202:
           break;
-        case 203:
-          break;
         default:
           console.log(apiErrorRes.error);
       }
