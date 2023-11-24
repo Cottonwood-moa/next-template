@@ -54,7 +54,7 @@ export default {
       result.push(randomDigit);
     }
 
-    return result.join('');
+    return Number(result.join(''));
   },
   /**
    * @description 날짜를 입력받아 최근 1달 이내 날짜일 경우 true를 반환한다.
