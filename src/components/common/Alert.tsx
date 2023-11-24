@@ -47,7 +47,15 @@ export default function Alert() {
                     !item?.type && 'text-accent-content',
                   )}
                 >
-                  <span className={twMerge('mr-2', `text-${item.type}`)}>
+                  <span
+                    className={twMerge(
+                      'mr-2',
+                      item.type === 'info' && 'text-info',
+                      item.type === 'success' && 'text-success',
+                      item.type === 'warning' && 'text-warning',
+                      item.type === 'error' && 'text-error',
+                    )}
+                  >
                     <Svg type={`icon-${item?.type}`} />
                   </span>
                   <span>{item.message}</span>
