@@ -1,33 +1,5 @@
 export default {
   /**
-   * @param {string} url 변환 받을 url
-   * @returns {URL} 변환된 URL
-   */
-  toUrl: (url: string): URL => new URL(url, import.meta.url),
-  /**
-   * @param {string} key
-   * @returns icon-{key}.svg
-   */
-  getIcon: (key: string) => {
-    // const path = new URL(`@/assets/icons/`, import.meta.url)
-    if (key === 'egov-ingress') {
-      return `/src/assets/icons/icon-istio.svg`;
-    }
-    if (key.includes('egov')) {
-      return `/src/assets/icons/icon-egov.svg`;
-    }
-    return `/src/assets/icons/icon-${key}.svg`;
-  },
-  /**
-   * @returns 지정된 colorset 반환
-   */
-  getColorSet: () => [
-    'rgba(97, 186, 66, 0.6)',
-    'rgba(239, 168, 27, 0.6)',
-    'rgba(218, 137, 195, 0.6)',
-    'rgba(89, 134, 222, 0.6)',
-  ],
-  /**
    * @param len
    * @returns
    */
@@ -43,8 +15,8 @@ export default {
   },
   /**
    *
-   * @param length
-   * @returns
+   * @param {number} length
+   * @returns {number} random number
    */
   randomNumber(length: number) {
     const result: number[] = [];
@@ -55,16 +27,6 @@ export default {
     }
 
     return Number(result.join(''));
-  },
-  /**
-   * @description 날짜를 입력받아 최근 1달 이내 날짜일 경우 true를 반환한다.
-   */
-  isWithinLastMonth(inputDateString: string): boolean {
-    const currentDate = new Date();
-    const inputDate = new Date(inputDateString);
-    const oneMonthAgo = new Date();
-    oneMonthAgo.setMonth(currentDate.getMonth() - 1);
-    return inputDate >= oneMonthAgo && inputDate <= currentDate;
   },
 
   getRandomColor() {
