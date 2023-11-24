@@ -26,6 +26,16 @@ export interface MockAddPostResponse {
   userId: number;
 }
 
+export interface MockAddPostError {
+  message: string;
+}
+
+export interface MockAddPostBody {
+  userId: number;
+  title: string;
+  body: string;
+}
+
 /**
  * @description mock post list
  */
@@ -48,7 +58,8 @@ export function useGetMockPost() {
 export function usePostMockPost() {
   const { data, error, isLoading, mutation } = useMutation<
     MockAddPostResponse,
-    { message: 'string' }
+    MockAddPostError,
+    MockAddPostBody
   >('https://dummyjson.com/posts/add', commonRequestPost);
   return { data, error, isLoading, mutation };
 }
