@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from 'axios';
 import useSWR from 'swr';
 import useMutation from '@/hooks/useMutation';
-import { commonRequestGet, commonRequestPost } from './axios/axiosRequest';
+import { commonRequestGet, commonRequestPost } from '../axios/axiosRequest';
 
 interface Post {
   id: string;

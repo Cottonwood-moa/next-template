@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import useMutation from '@/hooks/useMutation';
 import { AxiosError } from 'axios';
-import { commonRequestGet, commonRequestPost } from './axios/axiosRequest';
+import { commonRequestGet, commonRequestPost } from '../axios/axiosRequest';
 
 export interface MockPostResponse {
   posts: MockPost[];
