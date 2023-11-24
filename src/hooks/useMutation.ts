@@ -53,7 +53,7 @@ export default function useMutation<T, F, B>(
         error: axiosErrorTypeAssertion.response,
       }));
     } finally {
-      setState((prev) => ({ ...prev, loading: false }));
+      setState((prev) => ({ ...prev, isLoading: false }));
     }
   }
 
