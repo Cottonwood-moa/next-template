@@ -12,9 +12,9 @@ import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 
 export default function Home() {
   const router = useRouter();
+  const setLoading = useSetRecoilState(loadingStore);
   const pageRef = useRef<HTMLDivElement>(null);
   const isMounted = useRef(false);
-  const setLoading = useSetRecoilState(loadingStore);
   const [parsedPosts, setParsedPosts] = useState({
     limit: 0,
     total: 0,
@@ -44,8 +44,8 @@ export default function Home() {
     data,
     size: _size,
     setSize,
-    isLoading,
-    isValidating,
+    isLoading, // 최초 useSWRInfinite 이용 호출 시 또는 mutate 시?
+    isValidating, // setSize로 추가 호출 시
   } = useSWRInfinite<MockPostResponse>(getKey, commonRequestGet, {
     revalidateFirstPage: false,
   });
