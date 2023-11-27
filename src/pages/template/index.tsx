@@ -18,17 +18,8 @@ import Tooltip from '@/components/common/Tooltip';
 const Template: NextPage = () => {
   const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [test, setTest] = useState('테스트');
   const alertFire = useSetRecoilState(alertFireSelector);
   const setLoading = useSetRecoilState(loadingStore);
-  /**
-   * @description post list (get)
-   */
-  const {
-    data: postResponse,
-    isLoading: _postListLoading,
-    mutate: getPost,
-  } = useGetMockPost();
 
   /**
    * @description add post (post)
@@ -159,22 +150,8 @@ const Template: NextPage = () => {
           >
             Loading on/off
           </button>
-          <button
-            type="button"
-            className="btn"
-            onClick={() => getPost({ ...(postResponse as MockPostResponse) })}
-          >
-            mutate
-          </button>
           <button type="button" className="btn" onClick={postRequest}>
             post
-          </button>
-          <button
-            type="button"
-            className="btn"
-            onClick={() => setTest(commonUtil.randomString(12))}
-          >
-            test
           </button>
           <Dialog ref={dialogRef} header="Dialog">
             테스트

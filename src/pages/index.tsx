@@ -1,13 +1,30 @@
+import { loadingStore } from '@/atom/atom';
 import { commonRequestGet } from '@/axios/axiosRequest';
 import MainLayout from '@/components/layouts/MainLayout';
 import PageTransition from '@/components/layouts/PageTransition';
-import { MockPostResponse, MockPost } from '@/services/mockPostService';
-import { isEmpty } from 'lodash';
-import { useEffect, useRef } from 'react';
+import { MockPostResponse } from '@/services/mockPostService';
+import commonUtil from '@/utils/commonUtil';
+import { cloneDeep, debounce, isEmpty } from 'lodash';
+import { useRouter } from 'next/router';
+import { useRef, useCallback, useEffect, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 
 export default function Home() {
+  const router = useRouter();
   const pageRef = useRef<HTMLDivElement>(null);
+  const isMounted = useRef(false);
+  const setLoading = useSetRecoilState(loadingStore);
+  const [parsedPosts, setParsedPosts] = useState({
+    limit: 0,
+    total: 0,
+    skip: 0,
+    posts: [],
+  });
+
+  /**
+   * @description useSWRInfinite에 제공할 API 호출 주소를 반환한다.
+   */
   const getKey: SWRInfiniteKeyLoader = (
     pageIndex: number,
     previousPageData: MockPostResponse,
@@ -19,28 +36,87 @@ export default function Home() {
     }`;
   };
 
-  const { data, size, setSize } = useSWRInfinite<MockPostResponse>(
-    getKey,
-    commonRequestGet,
-    {
-      revalidateFirstPage: false,
-    },
-  );
+  /**
+   * @description mock post list  호출
+   * https://swr.vercel.app/docs/pagination
+   */
+  const {
+    data,
+    size: _size,
+    setSize,
+    isLoading,
+    isValidating,
+  } = useSWRInfinite<MockPostResponse>(getKey, commonRequestGet, {
+    revalidateFirstPage: false,
+  });
 
-  const onScrollEvent = () => {
-    const element = pageRef.current as HTMLElement;
-    const { scrollTop, clientHeight, scrollHeight } = element;
-    const isAtBottom =
-      scrollTop + clientHeight >= scrollHeight || clientHeight === scrollHeight;
-
-    if (isAtBottom) {
-      setSize(size + 1);
+  /**
+   * @description scroll event
+   * scroll 이 브라우저 최하단에 위치할 시 list를 추가 호출한다.
+   */
+  const onScrollEvent = useCallback(() => {
+    if (isValidating) return;
+    if (commonUtil.isScrollBottom(pageRef.current as HTMLElement)) {
+      setSize((prev) => prev + 1);
     }
-  };
+  }, [setSize, isValidating]);
 
+  /**
+   * @description 화면 확대 시 onScrollEvent 호출
+   */
   useEffect(() => {
-    setSize(5);
-  }, [setSize]);
+    const resizeHandler = debounce(() => {
+      onScrollEvent();
+    }, 200);
+    window.addEventListener('resize', resizeHandler);
+    return () => window.removeEventListener('resize', resizeHandler);
+  }, [onScrollEvent]);
+
+  /**
+   * @description 최초 40개 세팅
+   */
+  useEffect(() => {
+    if (isMounted.current) {
+      setSize(4);
+    }
+    return () => {
+      isMounted.current = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /**
+   * @description post 데이터 세팅
+   */
+  useEffect(() => {
+    if (isEmpty(data)) return;
+    let posts = [];
+    const chore = {
+      limit: 10,
+      skip: 0,
+      total: 0,
+    };
+    data.forEach((postBatch, idx: number) => {
+      posts = [...posts, ...cloneDeep(postBatch.posts)];
+      if (idx === data.length - 1) {
+        chore.limit = postBatch.limit;
+        chore.skip = postBatch.skip;
+        chore.total = postBatch.total;
+      }
+    });
+
+    setParsedPosts({
+      ...chore,
+      posts,
+    });
+  }, [data]);
+
+  /**
+   * @description SWR loading <-> page loading 추적.
+   */
+  useEffect(() => {
+    setLoading(isLoading);
+  }, [isLoading, setLoading]);
 
   return (
     <MainLayout>
@@ -50,19 +126,18 @@ export default function Home() {
           className="h-[calc(100vh-48px)] w-full overflow-y-auto p-4"
           onScroll={onScrollEvent}
         >
-          <button type="button" className="btn" onClick={onScrollEvent}>
-            클릭
+          <button
+            type="button"
+            className="btn"
+            onClick={() => router.push('/template')}
+          >
+            go to Template
           </button>
-          {data &&
-            data.map((postBatch) => (
-              <div key={postBatch.skip}>
-                {postBatch.posts.map((post: MockPost) => (
-                  <div key={post.id}>
-                    <div>{post.title}</div>
-                  </div>
-                ))}
-              </div>
-            ))}
+          {parsedPosts?.posts.map((post) => (
+            <div key={post.id}>
+              <div>{post.id}</div>
+            </div>
+          ))}
         </div>
       </PageTransition>
     </MainLayout>
