@@ -143,6 +143,7 @@ export default {
     const randomIndex: number = Math.floor(Math.random() * emojis.length);
     return emojis[randomIndex];
   },
+
   /**
    * @param {string} value
    * @description value를 클립보드에 복사한다.
@@ -154,5 +155,17 @@ export default {
     } catch (err) {
       return false;
     }
+  },
+
+  /**
+   * @param {HTMLElement} element
+   * @description 스크롤이 element 맨 아래 위치하는지 확인한다.
+   * @returns  boolean
+   */
+  isScrollBottom(element: HTMLElement) {
+    const { scrollTop, clientHeight, scrollHeight } = element;
+    const isAtBottom =
+      scrollTop + clientHeight >= scrollHeight || clientHeight === scrollHeight;
+    return isAtBottom;
   },
 };
