@@ -1,3 +1,7 @@
+/**
+ * @description mouted 여부를 반환한다.
+ * const isMounted = useIsMounted();
+ */
 import { useCallback, useEffect, useRef } from 'react';
 
 function useIsMounted() {
