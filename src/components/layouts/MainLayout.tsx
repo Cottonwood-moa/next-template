@@ -1,5 +1,4 @@
 import useLocalStorageWithSync from '@/hooks/useLocalStorageWithSync';
-import { useRef } from 'react';
 import MainHeader, { DaisyUiTheme } from '../headers/MainHeader';
 import Alert from '../common/Alert';
 import PageLoading from '../common/PageLoading';
