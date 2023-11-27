@@ -13,9 +13,7 @@ import {
   useGetMockPost,
   usePostMockPost,
 } from '@/services/mockPostService';
-import ReactTooltip from 'react-tooltip';
 import Tooltip from '@/components/common/Tooltip';
-import PostCard from '@/components/common/PostCard';
 
 const Template: NextPage = () => {
   const router = useRouter();
@@ -30,7 +28,7 @@ const Template: NextPage = () => {
     data: postResponse,
     isLoading: _postListLoading,
     mutate: getPost,
-  } = useGetMockPost({ test });
+  } = useGetMockPost();
 
   /**
    * @description add post (post)

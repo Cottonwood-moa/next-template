@@ -1,4 +1,5 @@
 import useLocalStorageWithSync from '@/hooks/useLocalStorageWithSync';
+import { useRef } from 'react';
 import MainHeader, { DaisyUiTheme } from '../headers/MainHeader';
 import Alert from '../common/Alert';
 import PageLoading from '../common/PageLoading';
@@ -15,7 +16,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
         theme={theme || 'light'}
         setTheme={(newTheme: DaisyUiTheme) => setTheme(newTheme)}
       />
-      <div className="h-full overflow-y-auto p-4">{children}</div>
+      {children}
       <Alert />
     </>
   );
