@@ -1,35 +1,36 @@
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import commonUtil from '@/utils/commonUtil';
+import ReactTooltip from 'react-tooltip';
 
 interface TooltipProps {
+  message: JSX.Element | React.ReactNode | string;
   children: React.ReactNode;
-  direction: string;
+  type?: 'dark' | 'light' | 'success' | 'warning' | 'info' | 'error';
+  direction?: 'top' | 'right' | 'left' | 'bottom';
+  effect?: 'solid' | 'float';
 }
 
-export default function Tooltip({ children, direction }: TooltipProps) {
-  const [isHover, setIsHover] = useState(false);
-  const onMouseEnter = () => {
-    setIsHover(true);
-  };
-
-  const onMouseOut = () => {
-    setIsHover(false);
-  };
-
+export default function Tooltip({
+  message,
+  children,
+  type = 'dark',
+  direction = 'top',
+  effect = 'solid',
+}: TooltipProps) {
+  const randomId = commonUtil.randomString(20);
   return (
-    <div className="relative h-fit w-fit">
-      {isHover && (
-        <motion.div className="absolute left-0 right-0 top-[-100px] m-auto h-[100px] w-[100px] rounded-md bg-slate-400">
-          테스트
-        </motion.div>
-      )}
-      <div
-        className="h-fit w-fit bg-red-200"
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseOut}
-      >
+    <>
+      <div className="h-fit w-fit" data-for={randomId} data-tip>
         {children}
       </div>
-    </div>
+      <ReactTooltip
+        id={randomId}
+        aria-haspopup="true"
+        place={direction}
+        type={type}
+        effect={effect}
+      >
+        {message}
+      </ReactTooltip>
+    </>
   );
 }
