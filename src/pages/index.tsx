@@ -55,22 +55,15 @@ export default function Home() {
    * scroll 이 브라우저 최하단에 위치할 시 list를 추가 호출한다.
    */
   const onScrollEvent = useCallback(() => {
+    // validating(불러오는 중)이면 return
     if (isValidating) return;
+    // 잔여 posts 없을 시 return
+    if (parsedPosts.posts.length === parsedPosts.total) return;
+    // scroll bottom check 후 setSize 호출
     if (commonUtil.isScrollBottom(pageRef.current as HTMLElement)) {
       setSize((prev) => prev + 1);
     }
-  }, [setSize, isValidating]);
-
-  /**
-   * @description 화면 확대 시 onScrollEvent 호출
-   */
-  useEffect(() => {
-    const resizeHandler = debounce(() => {
-      onScrollEvent();
-    }, 200);
-    window.addEventListener('resize', resizeHandler);
-    return () => window.removeEventListener('resize', resizeHandler);
-  }, [onScrollEvent]);
+  }, [setSize, isValidating, parsedPosts]);
 
   /**
    * @description 최초 40개 세팅
@@ -84,6 +77,17 @@ export default function Home() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  /**
+   * @description 화면 확대 시 onScrollEvent 호출
+   */
+  useEffect(() => {
+    const resizeHandler = debounce(() => {
+      onScrollEvent();
+    }, 200);
+    window.addEventListener('resize', resizeHandler);
+    return () => window.removeEventListener('resize', resizeHandler);
+  }, [onScrollEvent]);
 
   /**
    * @description post 데이터 세팅
