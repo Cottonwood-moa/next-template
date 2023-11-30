@@ -119,6 +119,14 @@ export default function Home() {
     setTimeout(() => {
       const pageRefScrollHeight = pageRef.current.scrollHeight;
       const toHeight = pageRefScrollHeight * scrollY;
+      console.log(
+        '하이킥 scrollY',
+        scrollY,
+        pageRef.current.clientHeight,
+        pageRef.current.offsetHeight,
+        pageRef.current.scrollHeight,
+        toHeight,
+      );
       pageRef.current.scrollTo({
         top: toHeight,
         behavior: 'smooth',
