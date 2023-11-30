@@ -22,12 +22,7 @@ html {
 body {
   color: rgb(var(--foreground-rgb));
   height: 100%;
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: oklch(var(--b1));
 }
 
 // 스크롤바 전체
