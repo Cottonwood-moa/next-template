@@ -11,12 +11,11 @@ import { SWRConfig } from 'swr';
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [value, _setValue] = useLocalStorageWithSync('theme');
-
   return (
     <SWRConfig>
       <RecoilRoot>
         <div data-theme={value || 'light'}>
-          <AnimatePresence mode="wait" initial={false}>
+          <AnimatePresence mode="wait">
             <Component {...pageProps} key={router.asPath} />
           </AnimatePresence>
         </div>

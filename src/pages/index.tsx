@@ -1,27 +1,36 @@
 import { loadingStore } from '@/atom/atom';
 import { commonRequestGet } from '@/axios/axiosRequest';
+import PostCard from '@/components/common/PostCard';
 import MainLayout from '@/components/layouts/MainLayout';
-import PageTransition from '@/components/layouts/PageTransition';
+import SideMenu from '@/components/menu/SideMenu';
 import { MockPostResponse } from '@/services/mockPostService';
-import commonUtil from '@/utils/commonUtil';
-import { cloneDeep, debounce, isEmpty } from 'lodash';
-import { useRouter } from 'next/router';
+import { cloneDeep, isEmpty } from 'lodash';
 import { useRef, useCallback, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
+import { useScroll, useIntersectionObserver } from '@react-hooks-library/core';
 
 export default function Home() {
-  const router = useRouter();
   const setLoading = useSetRecoilState(loadingStore);
   const pageRef = useRef<HTMLDivElement>(null);
   const isMounted = useRef(false);
+  const scrollTriggerRef = useRef(null);
+  const [scroll, setScroll] = useState({ y: 0 });
+
+  useScroll(pageRef, ({ scrollY }) => setScroll({ y: scrollY }));
+
   const [parsedPosts, setParsedPosts] = useState({
     limit: 0,
     total: 0,
     skip: 0,
     posts: [],
   });
-
+  const { inView: isScrollTriggerRefInView } = useIntersectionObserver(
+    scrollTriggerRef,
+    {
+      threshold: 0.5,
+    },
+  );
   /**
    * @description useSWRInfinite에 제공할 API 호출 주소를 반환한다.
    */
@@ -44,50 +53,12 @@ export default function Home() {
     data,
     size: _size,
     setSize,
-    isLoading, // 최초 useSWRInfinite 이용 호출 시 또는 mutate 시?
-    isValidating, // setSize로 추가 호출 시
+    isLoading,
+    isValidating,
   } = useSWRInfinite<MockPostResponse>(getKey, commonRequestGet, {
     revalidateFirstPage: false,
+    initialSize: 2,
   });
-
-  /**
-   * @description scroll event
-   * scroll 이 브라우저 최하단에 위치할 시 list를 추가 호출한다.
-   */
-  const onScrollEvent = useCallback(() => {
-    // validating(불러오는 중)이면 return
-    if (isValidating) return;
-    // 잔여 posts 없을 시 return
-    if (parsedPosts.posts.length === parsedPosts.total) return;
-    // scroll bottom check 후 setSize 호출
-    if (commonUtil.isScrollBottom(pageRef.current as HTMLElement)) {
-      setSize((prev) => prev + 1);
-    }
-  }, [setSize, isValidating, parsedPosts]);
-
-  /**
-   * @description 최초 40개 세팅
-   */
-  useEffect(() => {
-    if (isMounted.current) {
-      setSize(4);
-    }
-    return () => {
-      isMounted.current = true;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  /**
-   * @description 화면 확대 시 onScrollEvent 호출
-   */
-  useEffect(() => {
-    const resizeHandler = debounce(() => {
-      onScrollEvent();
-    }, 200);
-    window.addEventListener('resize', resizeHandler);
-    return () => window.removeEventListener('resize', resizeHandler);
-  }, [onScrollEvent]);
 
   /**
    * @description post 데이터 세팅
@@ -116,6 +87,54 @@ export default function Home() {
   }, [data]);
 
   /**
+   * @description scroll event
+   * scroll 이 브라우저 최하단에 위치할 시 list를 추가 호출한다.
+   * early return 조건
+   * 1. isValidationg -> setSize로 swr 추가 호출할 경우 true
+   * 2. post 갯수가 total에 도달했을 경우.
+   */
+  const fetchNextList = useCallback(async () => {
+    if (isValidating) return;
+    if (parsedPosts.posts.length === parsedPosts.total) return;
+    await setSize((prev) => prev + 1);
+  }, [setSize, isValidating, parsedPosts]);
+
+  /**
+   * @description scrollTriggerRef 가 viewPort에 들어올 시 다음 list 호출.
+   */
+  useEffect(() => {
+    if (isScrollTriggerRefInView) {
+      fetchNextList();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isScrollTriggerRefInView]);
+
+  useEffect(() => {
+    if (!isMounted.current) return;
+    sessionStorage.setItem('post_list_scroll_height', String(scroll.y));
+  }, [scroll]);
+
+  useEffect(() => {
+    const scrollY = Number(sessionStorage.getItem('post_list_scroll_height'));
+    setTimeout(() => {
+      const pageRefScrollHeight = pageRef.current.scrollHeight;
+      const toHeight = pageRefScrollHeight * scrollY;
+      pageRef.current.scrollTo({
+        top: toHeight,
+        behavior: 'smooth',
+      });
+    }, 200);
+  }, []);
+
+  useEffect(() => {
+    isMounted.current = true;
+
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  /**
    * @description SWR loading <-> page loading 추적.
    */
   useEffect(() => {
@@ -123,27 +142,26 @@ export default function Home() {
   }, [isLoading, setLoading]);
 
   return (
-    <MainLayout>
-      <PageTransition>
-        <div
-          ref={pageRef}
-          className="h-[calc(100vh-48px)] w-full overflow-y-auto p-4"
-          onScroll={onScrollEvent}
-        >
-          <button
-            type="button"
-            className="btn"
-            onClick={() => router.push('/template')}
-          >
-            go to Template
-          </button>
+    <MainLayout side={<SideMenu />}>
+      <div
+        ref={pageRef}
+        className="h-[calc(100vh-48px)] w-full overflow-y-scroll bg-base-100 p-4"
+      >
+        <div className="grid w-full grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {parsedPosts?.posts.map((post) => (
-            <div key={post.id}>
-              <div>{post.id}</div>
+            <div
+              key={post.id}
+              className="flex w-full items-center justify-center"
+            >
+              <PostCard id={post.id} />
             </div>
           ))}
         </div>
-      </PageTransition>
+        <div
+          ref={scrollTriggerRef}
+          className="opacity-1 h-10 w-full bg-red-400 opacity-0"
+        />
+      </div>
     </MainLayout>
   );
 }

@@ -1,22 +1,23 @@
 export default {
   /**
-   * @param len
-   * @returns
+   * @param length
+   * @returns {string}
+   * @description length 만큼의 랜덤 문자열을 반환한다.
    */
-  randomString(len: number) {
+  randomString(length: number) {
     let result = '';
     const characters =
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;
-    for (let i = 0; i < len; i += 1) {
+    for (let i = 0; i < length; i += 1) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
   },
   /**
-   *
    * @param {number} length
    * @returns {number} random number
+   * @description length 만큼의 랜덤 숫자를 반환한다.
    */
   randomNumber(length: number) {
     const result: number[] = [];
@@ -28,7 +29,10 @@ export default {
 
     return Number(result.join(''));
   },
-
+  /**
+   * @returns {string} color
+   * @description 랜덤 hex color를 반환한다.
+   */
   getRandomColor() {
     const letters = '0123456789ABCDEF';
     let color = '#';

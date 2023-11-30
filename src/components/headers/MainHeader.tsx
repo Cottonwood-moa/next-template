@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { capitalize } from 'lodash';
+import { useRouter } from 'next/router';
 import Svg from '../common/Svg';
 
 export type DaisyUiTheme =
@@ -42,6 +43,7 @@ interface MainHeaderProps {
 }
 
 export default function MainHeader({ theme, setTheme }: MainHeaderProps) {
+  const router = useRouter();
   const daisyUiThemeList: DaisyUiTheme[] = [
     'light',
     'dark',
@@ -87,6 +89,13 @@ export default function MainHeader({ theme, setTheme }: MainHeaderProps) {
   return (
     <div className="flex items-center justify-between bg-black pb-1 pl-3 pr-3 pt-1">
       {/* 왼쪽 컨텐츠 */}
+      <button
+        type="button"
+        className="btn"
+        onClick={() => router.push('/template')}
+      >
+        go to Template
+      </button>
       <div />
       {/* 오른쪽 컨텐츠 */}
       {/* Theme 변경 아이콘 */}
