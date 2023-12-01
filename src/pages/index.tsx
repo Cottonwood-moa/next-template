@@ -9,6 +9,7 @@ import { useSetRecoilState } from 'recoil';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { useScroll, useIntersectionObserver } from '@react-hooks-library/core';
 import { motion } from 'framer-motion';
+import Svg from '@/components/common/Svg';
 
 export default function Home() {
   /* Loading */
@@ -192,10 +193,10 @@ export default function Home() {
     setLoading(isLoading);
   }, [isLoading, setLoading]);
 
-  const [layout, _setLayout] = useState(true);
-  /*   const onClickLayoutTest = () => {
+  const [layout, setLayout] = useState(true);
+  const onClickLayoutTest = () => {
     setLayout((prev) => !prev);
-  }; */
+  };
 
   return (
     <MainLayout>
@@ -208,9 +209,12 @@ export default function Home() {
           animate={{ y: 0, opacity: 1 }}
           className="mb-8 h-80 w-full max-w-[2000px] bg-slate-900"
         >
-          test
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button type="button" className="btn" onClick={onClickLayoutTest}>
+            <Svg type="icon-moon" />
+          </button>
         </motion.div>
-        <div
+        <motion.div
           className={
             layout
               ? 'grid w-full max-w-[2000px] grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
@@ -230,7 +234,7 @@ export default function Home() {
               />
             </div>
           ))}
-        </div>
+        </motion.div>
         <div
           ref={scrollTriggerRef}
           className="opacity-1 h-10 w-full bg-red-400 opacity-0"

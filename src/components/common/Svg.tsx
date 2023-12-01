@@ -1,12 +1,21 @@
+import useLocalStorageWithSync from '@/hooks/useLocalStorageWithSync';
 import { twMerge } from 'tailwind-merge';
 
 interface SvgProps {
   type: string;
-  color?: string;
+  lightColor?: string;
+  darkColor?: string;
   className?: string;
 }
 
-export default function Svg({ type, color = 'white', className }: SvgProps) {
+export default function Svg({
+  type,
+  lightColor = 'black',
+  darkColor = 'white',
+  className,
+}: SvgProps) {
+  const [value, _setValue] = useLocalStorageWithSync('theme');
+
   return (
     <>
       {type === 'icon-sun' && (
@@ -14,7 +23,7 @@ export default function Svg({ type, color = 'white', className }: SvgProps) {
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          stroke={color}
+          stroke={value === 'light' ? lightColor : darkColor}
           strokeWidth="1.5"
           className={twMerge('h-6 w-6', className)}
         >
@@ -32,7 +41,7 @@ export default function Svg({ type, color = 'white', className }: SvgProps) {
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth="1.5"
-          stroke={color}
+          stroke={value === 'light' ? lightColor : darkColor}
           className={twMerge('h-6 w-6', className)}
         >
           <path
@@ -49,7 +58,7 @@ export default function Svg({ type, color = 'white', className }: SvgProps) {
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth="1.5"
-          stroke={color}
+          stroke={value === 'light' ? lightColor : darkColor}
           className="h-6 w-6"
         >
           <path
@@ -65,7 +74,7 @@ export default function Svg({ type, color = 'white', className }: SvgProps) {
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          stroke={color}
+          stroke={value === 'light' ? lightColor : darkColor}
           className="h-6 w-6 shrink-0 stroke-current"
         >
           <path
@@ -83,7 +92,7 @@ export default function Svg({ type, color = 'white', className }: SvgProps) {
           className="h-6 w-6 shrink-0 stroke-current"
           fill="none"
           viewBox="0 0 24 24"
-          stroke={color}
+          stroke={value === 'light' ? lightColor : darkColor}
         >
           <path
             strokeLinecap="round"
@@ -100,7 +109,7 @@ export default function Svg({ type, color = 'white', className }: SvgProps) {
           className="h-6 w-6 shrink-0 stroke-current"
           fill="none"
           viewBox="0 0 24 24"
-          stroke={color}
+          stroke={value === 'light' ? lightColor : darkColor}
         >
           <path
             strokeLinecap="round"
@@ -117,7 +126,7 @@ export default function Svg({ type, color = 'white', className }: SvgProps) {
           className="h-6 w-6 shrink-0 stroke-current"
           fill="none"
           viewBox="0 0 24 24"
-          stroke={color}
+          stroke={value === 'light' ? lightColor : darkColor}
         >
           <path
             strokeLinecap="round"
