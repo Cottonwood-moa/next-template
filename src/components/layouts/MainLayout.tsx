@@ -10,13 +10,13 @@ interface MainLayoutProps {
 export default function MainLayout({ children, side }: MainLayoutProps) {
   const [theme, setTheme] = useLocalStorageWithSync('theme');
   return (
-    <div className="bg-base-100">
+    <div className="w-full bg-base-100">
       <PageLoading />
       <MainHeader
         theme={theme || 'light'}
         setTheme={(newTheme: DaisyUiTheme) => setTheme(newTheme)}
       />
-      <div className="bg-base-100">{side}</div>
+      {side}
       <div
         className={
           side
