@@ -16,9 +16,18 @@
     "@fontsource/noto-sans-kr": "^5.0.16",
     "@heroicons/react": "^2.0.18",
     "@react-hooks-library/core": "^0.5.1",
+    "@react-three/fiber": "^8.15.11",
+    "@visx/group": "^3.3.0",
+    "@visx/mock-data": "^3.3.0",
+    "@visx/responsive": "file:visx/scale@visx/text@visx/wordcloud",
+    "@visx/scale": "^3.5.0",
+    "@visx/shape": "^3.5.0",
+    "@visx/text": "^3.3.0",
+    "@visx/wordcloud": "^3.3.0",
     "axios": "^1.6.2",
     "env-cmd": "^10.1.0",
     "framer-motion": "^10.16.5",
+    "framer-motion-3d": "^10.16.9",
     "lodash": "^4.17.21",
     "next": "14.0.2",
     "react": "^18",
@@ -28,7 +37,8 @@
     "recoil": "^0.7.7",
     "sass": "^1.69.5",
     "swr": "^2.2.4",
-    "tailwind-merge": "^2.0.0"
+    "tailwind-merge": "^2.0.0",
+    "three": "^0.159.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.201",
