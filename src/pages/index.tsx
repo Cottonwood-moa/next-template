@@ -141,30 +141,30 @@ export default function Home() {
       });
     }, 200);
   }, []);
-
+  const [isEndFirstValidate, setIsEndFirstValidate] = useState(false);
   /**
    * @description list 추가 호출 직후 scrollY 업데이트를 위한 트리거.
    * 100ms 간격으로 3번 업데이트 함.
    */
   useEffect(() => {
-    let updateSessionScroll;
-    if (isMounted.current) {
-      setLoading(isValidating);
-      if (!isValidating) {
-        let cnt = 0;
-        updateSessionScroll = setInterval(() => {
-          if (cnt <= 3) {
-            pageRef.current.scrollTop -= 0.001;
-            cnt += 1;
-          } else {
-            clearInterval(updateSessionScroll);
-          }
-        }, 100);
-      }
+    setLoading(isValidating);
+    // mount 되지 않았다면 return 한다.
+    if (!isMounted.current) return;
+    // validating (setSize 종속 로딩 / 최초 진입에도 로딩됨)중이라면 return 한다.
+    if (isValidating) return;
+    // 최초 진입으로 validating 중이라면 return 한다.
+    if (!isEndFirstValidate) {
+      setIsEndFirstValidate(true);
+      return;
     }
-    return () => {
-      if (updateSessionScroll) clearInterval(updateSessionScroll);
-    };
+    Array.from({ length: 3 }).forEach((_, idx) => {
+      setTimeout(
+        () => {
+          pageRef.current.scrollTop -= 0.001;
+        },
+        (idx + 1) * 100,
+      );
+    });
   }, [isValidating]);
 
   /**
