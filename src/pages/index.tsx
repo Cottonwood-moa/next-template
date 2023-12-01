@@ -4,7 +4,7 @@ import PostCard from '@/components/common/PostCard';
 import MainLayout from '@/components/layouts/MainLayout';
 import SideMenu from '@/components/menu/SideMenu';
 import { MockPostResponse } from '@/services/mockPostService';
-import { cloneDeep, isEmpty, update } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import { useRef, useCallback, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
@@ -192,9 +192,9 @@ export default function Home() {
     <MainLayout side={<SideMenu />}>
       <div
         ref={pageRef}
-        className="h-[calc(100vh-48px)] w-full overflow-y-scroll bg-base-100 p-4"
+        className="flex h-[calc(100vh-48px)] w-full flex-col items-center overflow-y-scroll bg-base-100 p-4"
       >
-        <div className="grid w-full grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        <div className="grid w-full max-w-[2400px] grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {parsedPosts?.posts.map((post) => (
             <div
               key={post.id}
