@@ -4,35 +4,49 @@ import PostCard from '@/components/common/PostCard';
 import MainLayout from '@/components/layouts/MainLayout';
 import SideMenu from '@/components/menu/SideMenu';
 import { MockPostResponse } from '@/services/mockPostService';
-import { cloneDeep, isEmpty } from 'lodash';
+import { cloneDeep, isEmpty, update } from 'lodash';
 import { useRef, useCallback, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { useScroll, useIntersectionObserver } from '@react-hooks-library/core';
 
 export default function Home() {
+  /* Loading */
   const setLoading = useSetRecoilState(loadingStore);
+  /* pageRef */
   const pageRef = useRef<HTMLDivElement>(null);
+  /* mount flag value */
   const isMounted = useRef(false);
+  /* Infinite scroll flag ref */
   const scrollTriggerRef = useRef(null);
+  /* scroll value */
   const [scroll, setScroll] = useState({ y: 0 });
-
+  /* useScroll Hook */
   useScroll(pageRef, ({ scrollY }) => setScroll({ y: scrollY }));
-
+  /* 
+    for render. 
+    posts 에 데이터 쌓임.
+    limit, total, skip은 마지막 요청 기준으로 업데이트 됨.  
+  */
   const [parsedPosts, setParsedPosts] = useState({
     limit: 0,
     total: 0,
     skip: 0,
     posts: [],
   });
+  /* 
+    Infinite Scroll 위한 hook
+    제공된 ref 가 viewPort에 들어오면 inView 가 true가 되고 벗어나면 false.
+  */
   const { inView: isScrollTriggerRefInView } = useIntersectionObserver(
     scrollTriggerRef,
     {
-      threshold: 0.5,
+      threshold: 1,
     },
   );
+
   /**
-   * @description useSWRInfinite에 제공할 API 호출 주소를 반환한다.
+   * @description useSWRInfinite에 제공할 API 호출 주소 반환.
    */
   const getKey: SWRInfiniteKeyLoader = (
     pageIndex: number,
@@ -46,7 +60,7 @@ export default function Home() {
   };
 
   /**
-   * @description mock post list  호출
+   * @description mock post list  호출.
    * https://swr.vercel.app/docs/pagination
    */
   const {
@@ -61,7 +75,7 @@ export default function Home() {
   });
 
   /**
-   * @description post 데이터 세팅
+   * @description post 데이터 세팅.
    */
   useEffect(() => {
     if (isEmpty(data)) return;
@@ -100,33 +114,55 @@ export default function Home() {
   }, [setSize, isValidating, parsedPosts]);
 
   /**
+   * @description list 추가 호출 직후 scrollY 업데이트를 위한 트리거.
+   * 100ms 간격으로 3번 업데이트 함.
+   */
+  useEffect(() => {
+    setLoading(isValidating);
+    let updateSessionScroll;
+    if (!isValidating) {
+      let cnt = 0;
+      updateSessionScroll = setInterval(() => {
+        if (cnt <= 3) {
+          pageRef.current.scrollTop -= 0.001;
+          cnt += 1;
+        } else {
+          clearInterval(updateSessionScroll);
+        }
+      }, 100);
+    }
+    return () => {
+      if (updateSessionScroll) clearInterval(updateSessionScroll);
+    };
+  }, [isValidating]);
+
+  /**
    * @description scrollTriggerRef 가 viewPort에 들어올 시 다음 list 호출.
    */
   useEffect(() => {
     if (isScrollTriggerRefInView) {
       fetchNextList();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isScrollTriggerRefInView]);
 
+  /**
+   * @description scroll change -> sessionStorage 저장.
+   */
   useEffect(() => {
     if (!isMounted.current) return;
     sessionStorage.setItem('post_list_scroll_height', String(scroll.y));
   }, [scroll]);
 
+  /**
+   * @description 최초 진입 시 scroll restoration.
+   */
   useEffect(() => {
     const scrollY = Number(sessionStorage.getItem('post_list_scroll_height'));
     setTimeout(() => {
-      const pageRefScrollHeight = pageRef.current.scrollHeight;
+      // 왜 인지 모르겠지만 실제 scroll 가능한 height와 pageRef.current.scrollHeight 간에 900px 정도의 차이가 있음
+      // 그래서 -900으로 안맞춰주면 다른 페이지 이동 후 되돌아 왔을 때 스크롤이 정확이 restoration 되지 않음.
+      const pageRefScrollHeight = pageRef.current.scrollHeight - 900;
       const toHeight = pageRefScrollHeight * scrollY;
-      console.log(
-        '하이킥 scrollY',
-        scrollY,
-        pageRef.current.clientHeight,
-        pageRef.current.offsetHeight,
-        pageRef.current.scrollHeight,
-        toHeight,
-      );
       pageRef.current.scrollTo({
         top: toHeight,
         behavior: 'smooth',
@@ -134,6 +170,9 @@ export default function Home() {
     }, 200);
   }, []);
 
+  /**
+   * @description mount 여부 flag value 할당.
+   */
   useEffect(() => {
     isMounted.current = true;
 
