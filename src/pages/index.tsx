@@ -137,7 +137,7 @@ export default function Home() {
         top: toHeight,
         behavior: 'smooth',
       });
-    }, 200);
+    }, 400);
   }, []);
 
   /**
