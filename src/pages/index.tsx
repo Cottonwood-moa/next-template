@@ -9,10 +9,6 @@ import { useSetRecoilState } from 'recoil';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { useScroll, useIntersectionObserver } from '@react-hooks-library/core';
 import { motion } from 'framer-motion';
-import dynamic from 'next/dynamic';
-import PageTransition from '@/components/layouts/PageTransition';
-
-// const WordCloud = dynamic(() => import('@/components/common/WordCloud'));
 
 export default function Home() {
   /* Loading */
@@ -25,6 +21,8 @@ export default function Home() {
   const scrollTriggerRef = useRef(null);
   /* scroll value */
   const [scroll, setScroll] = useState({ y: 0 });
+  /* 최초 진입 시의 validating 인지 체크 용도 */
+  const [isEndFirstValidate, setIsEndFirstValidate] = useState(false);
   /* useScroll Hook */
   useScroll(pageRef, ({ scrollY }) => setScroll({ y: scrollY }));
   /* 
@@ -141,7 +139,7 @@ export default function Home() {
       });
     }, 200);
   }, []);
-  const [isEndFirstValidate, setIsEndFirstValidate] = useState(false);
+
   /**
    * @description list 추가 호출 직후 scrollY 업데이트를 위한 트리거.
    * 100ms 간격으로 3번 업데이트 함.
@@ -152,7 +150,7 @@ export default function Home() {
     if (!isMounted.current) return;
     // validating (setSize 종속 로딩 / 최초 진입에도 로딩됨)중이라면 return 한다.
     if (isValidating) return;
-    // 최초 진입으로 validating 중이라면 return 한다.
+    // 최초 진입으로 validating 중이라면 return 한다. (최초에는 session에 저장되어 있는 scroll 을 적용해야하는데 아래로 덮어씌워지기 떄문.)
     if (!isEndFirstValidate) {
       setIsEndFirstValidate(true);
       return;
