@@ -11,6 +11,7 @@ import { SWRConfig } from 'swr';
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [value, _setValue] = useLocalStorageWithSync('theme');
+  // mode -> 'popLayout', 'wait', 'sync'
   return (
     <SWRConfig>
       <RecoilRoot>

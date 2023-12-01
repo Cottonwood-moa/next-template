@@ -2,13 +2,17 @@ import { loadingStore } from '@/atom/atom';
 import { commonRequestGet } from '@/axios/axiosRequest';
 import PostCard from '@/components/common/PostCard';
 import MainLayout from '@/components/layouts/MainLayout';
-import SideMenu from '@/components/menu/SideMenu';
 import { MockPostResponse } from '@/services/mockPostService';
 import { cloneDeep, isEmpty } from 'lodash';
 import { useRef, useCallback, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { useScroll, useIntersectionObserver } from '@react-hooks-library/core';
+import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
+import PageTransition from '@/components/layouts/PageTransition';
+
+// const WordCloud = dynamic(() => import('@/components/common/WordCloud'));
 
 export default function Home() {
   /* Loading */
@@ -71,7 +75,7 @@ export default function Home() {
     isValidating,
   } = useSWRInfinite<MockPostResponse>(getKey, commonRequestGet, {
     revalidateFirstPage: false,
-    initialSize: 2,
+    initialSize: 1,
   });
 
   /**
@@ -114,38 +118,6 @@ export default function Home() {
   }, [setSize, isValidating, parsedPosts]);
 
   /**
-   * @description list 추가 호출 직후 scrollY 업데이트를 위한 트리거.
-   * 100ms 간격으로 3번 업데이트 함.
-   */
-  useEffect(() => {
-    setLoading(isValidating);
-    let updateSessionScroll;
-    if (!isValidating) {
-      let cnt = 0;
-      updateSessionScroll = setInterval(() => {
-        if (cnt <= 3) {
-          pageRef.current.scrollTop -= 0.001;
-          cnt += 1;
-        } else {
-          clearInterval(updateSessionScroll);
-        }
-      }, 100);
-    }
-    return () => {
-      if (updateSessionScroll) clearInterval(updateSessionScroll);
-    };
-  }, [isValidating]);
-
-  /**
-   * @description scrollTriggerRef 가 viewPort에 들어올 시 다음 list 호출.
-   */
-  useEffect(() => {
-    if (isScrollTriggerRefInView) {
-      fetchNextList();
-    }
-  }, [isScrollTriggerRefInView]);
-
-  /**
    * @description scroll change -> sessionStorage 저장.
    */
   useEffect(() => {
@@ -171,6 +143,40 @@ export default function Home() {
   }, []);
 
   /**
+   * @description list 추가 호출 직후 scrollY 업데이트를 위한 트리거.
+   * 100ms 간격으로 3번 업데이트 함.
+   */
+  useEffect(() => {
+    let updateSessionScroll;
+    if (isMounted.current) {
+      setLoading(isValidating);
+      if (!isValidating) {
+        let cnt = 0;
+        updateSessionScroll = setInterval(() => {
+          if (cnt <= 3) {
+            pageRef.current.scrollTop -= 0.001;
+            cnt += 1;
+          } else {
+            clearInterval(updateSessionScroll);
+          }
+        }, 100);
+      }
+    }
+    return () => {
+      if (updateSessionScroll) clearInterval(updateSessionScroll);
+    };
+  }, [isValidating]);
+
+  /**
+   * @description scrollTriggerRef 가 viewPort에 들어올 시 다음 list 호출.
+   */
+  useEffect(() => {
+    if (isScrollTriggerRefInView) {
+      fetchNextList();
+    }
+  }, [isScrollTriggerRefInView]);
+
+  /**
    * @description mount 여부 flag value 할당.
    */
   useEffect(() => {
@@ -188,19 +194,42 @@ export default function Home() {
     setLoading(isLoading);
   }, [isLoading, setLoading]);
 
+  const [layout, _setLayout] = useState(true);
+  /*   const onClickLayoutTest = () => {
+    setLayout((prev) => !prev);
+  }; */
+
   return (
-    <MainLayout side={<SideMenu />}>
+    <MainLayout>
       <div
         ref={pageRef}
-        className="flex h-[calc(100vh-48px)] w-full flex-col items-center overflow-y-scroll bg-base-100 p-4"
+        className="h-[calc(100vh-50px)] w-full items-center overflow-y-scroll bg-base-100 p-8"
       >
-        <div className="grid w-full max-w-[2400px] grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        <motion.div
+          initial={{ y: -300, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="mb-8 h-80 w-full max-w-[2000px] bg-slate-900"
+        >
+          test
+        </motion.div>
+        <div
+          className={
+            layout
+              ? 'grid w-full max-w-[2000px] grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
+              : 'grid w-full max-w-[2000px] grid-cols-1 gap-12'
+          }
+        >
           {parsedPosts?.posts.map((post) => (
             <div
               key={post.id}
               className="flex w-full items-center justify-center"
             >
-              <PostCard id={post.id} />
+              <PostCard
+                id={post.id}
+                type={layout ? 'grid' : 'list'}
+                title={post.title}
+                body={post.body}
+              />
             </div>
           ))}
         </div>

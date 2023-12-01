@@ -101,40 +101,34 @@ export default function MainHeader({ theme, setTheme }: MainHeaderProps) {
       {/* Theme 변경 아이콘 */}
       <div className="flex items-center">
         {theme === 'light' && (
-          <AnimatePresence>
-            <motion.div
-              className="mr-4 flex h-7 w-7 cursor-pointer items-center justify-center"
-              animate={{ opacity: 1, rotate: 360 }}
-              onClick={() => onClickSelectTheme('dark')}
-            >
-              {/* icon-sun */}
-              <Svg type="icon-sun" />
-            </motion.div>
-          </AnimatePresence>
+          <motion.div
+            className="mr-4 flex h-7 w-7 cursor-pointer items-center justify-center"
+            animate={{ opacity: 1, rotate: 360 }}
+            onClick={() => onClickSelectTheme('dark')}
+          >
+            {/* icon-sun */}
+            <Svg type="icon-sun" />
+          </motion.div>
         )}
         {theme === 'dark' && (
-          <AnimatePresence>
-            <motion.div
-              className="mr-4 h-7 w-7 cursor-pointer items-center justify-center"
-              animate={{ opacity: 1, rotate: 360 }}
-              onClick={() => onClickSelectTheme('light')}
-            >
-              {/* icon-moon */}
-              <Svg type="icon-moon" />
-            </motion.div>
-          </AnimatePresence>
+          <motion.div
+            className="mr-4 h-7 w-7 cursor-pointer items-center justify-center"
+            animate={{ opacity: 1, rotate: 360 }}
+            onClick={() => onClickSelectTheme('light')}
+          >
+            {/* icon-moon */}
+            <Svg type="icon-moon" />
+          </motion.div>
         )}
         {theme !== 'dark' && theme !== 'light' && (
-          <AnimatePresence>
-            <motion.div
-              className="mr-4 h-7 w-7 cursor-pointer items-center justify-center"
-              animate={{ opacity: 1, rotate: 360 }}
-              onClick={() => onClickSelectTheme('light')}
-            >
-              {/* icon-point-brush */}
-              <Svg type="icon-point-brush" />
-            </motion.div>
-          </AnimatePresence>
+          <motion.div
+            className="mr-4 h-7 w-7 cursor-pointer items-center justify-center"
+            animate={{ opacity: 1, rotate: 360 }}
+            onClick={() => onClickSelectTheme('light')}
+          >
+            {/* icon-point-brush */}
+            <Svg type="icon-point-brush" />
+          </motion.div>
         )}
         {/* Theme 변경 Dropdown */}
         <label className="swap swap-rotate">

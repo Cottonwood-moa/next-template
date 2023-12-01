@@ -12,11 +12,10 @@ function PageTransition({ children, ...rest }: PageTransitionProps) {
       type: 'spring',
       stiffness: 260,
       damping: 20,
-      delay: 0.2,
     },
   };
 
-  const variant2 = {
+  /*   const variant2 = {
     initial: { scale: 0, opacity: 0 },
     animate: { scale: 1, opacity: 1 },
     exit: { scale: 0, opacity: 0 },
@@ -25,7 +24,7 @@ function PageTransition({ children, ...rest }: PageTransitionProps) {
       stiffness: 260,
       damping: 20,
     },
-  };
+  }; */
 
   return (
     <motion.div {...variant} {...rest}>
