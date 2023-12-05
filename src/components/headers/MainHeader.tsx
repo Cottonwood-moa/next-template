@@ -107,7 +107,7 @@ export default function MainHeader({ theme, setTheme }: MainHeaderProps) {
             onClick={() => onClickSelectTheme('dark')}
           >
             {/* icon-sun */}
-            <Svg type="icon-sun" lightColor="white" />
+            <Svg type="icon-sun" className='stroke-white'/>
           </motion.div>
         )}
         {theme === 'dark' && (
@@ -117,7 +117,7 @@ export default function MainHeader({ theme, setTheme }: MainHeaderProps) {
             onClick={() => onClickSelectTheme('light')}
           >
             {/* icon-moon */}
-            <Svg type="icon-moon" lightColor="white" />
+            <Svg type="icon-moon" className='stroke-white'/>
           </motion.div>
         )}
         {theme !== 'dark' && theme !== 'light' && (
@@ -127,7 +127,7 @@ export default function MainHeader({ theme, setTheme }: MainHeaderProps) {
             onClick={() => onClickSelectTheme('light')}
           >
             {/* icon-point-brush */}
-            <Svg type="icon-point-brush" lightColor="white" />
+            <Svg type="icon-point-brush" className='stroke-white'/>
           </motion.div>
         )}
         {/* Theme 변경 Dropdown */}

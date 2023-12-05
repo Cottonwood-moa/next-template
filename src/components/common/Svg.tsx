@@ -1,20 +1,14 @@
-import useLocalStorageWithSync from '@/hooks/useLocalStorageWithSync';
 import { twMerge } from 'tailwind-merge';
 
 interface SvgProps {
   type: string;
-  lightColor?: string;
-  darkColor?: string;
   className?: string;
 }
 
 export default function Svg({
   type,
-  lightColor = 'black',
-  darkColor = 'white',
   className,
 }: SvgProps) {
-  const [value, _setValue] = useLocalStorageWithSync('theme');
 
   return (
     <>
@@ -23,9 +17,8 @@ export default function Svg({
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          stroke={value === 'light' ? lightColor : darkColor}
           strokeWidth="1.5"
-          className={twMerge('h-6 w-6', className)}
+          className={twMerge('h-6 w-6 stroke-base-content', className)}
         >
           <path
             strokeLinecap="round"
@@ -41,8 +34,7 @@ export default function Svg({
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth="1.5"
-          stroke={value === 'light' ? lightColor : darkColor}
-          className={twMerge('h-6 w-6', className)}
+          className={twMerge('h-6 w-6 stroke-base-content', className)}
         >
           <path
             strokeLinecap="round"
@@ -58,8 +50,7 @@ export default function Svg({
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth="1.5"
-          stroke={value === 'light' ? lightColor : darkColor}
-          className="h-6 w-6"
+          className={twMerge('h-6 w-6 stroke-base-content', className)}
         >
           <path
             strokeLinecap="round"
@@ -74,8 +65,7 @@ export default function Svg({
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          stroke={value === 'light' ? lightColor : darkColor}
-          className="h-6 w-6 shrink-0 stroke-current"
+          className={twMerge('h-6 w-6 stroke-base-content', className)}
         >
           <path
             strokeLinecap="round"
@@ -89,10 +79,9 @@ export default function Svg({
       {type === 'icon-success' && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6 shrink-0 stroke-current"
+          className={twMerge('h-6 w-6 stroke-base-content', className)}
           fill="none"
           viewBox="0 0 24 24"
-          stroke={value === 'light' ? lightColor : darkColor}
         >
           <path
             strokeLinecap="round"
@@ -106,10 +95,9 @@ export default function Svg({
       {type === 'icon-warning' && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6 shrink-0 stroke-current"
+          className={twMerge('h-6 w-6 stroke-base-content', className)}
           fill="none"
           viewBox="0 0 24 24"
-          stroke={value === 'light' ? lightColor : darkColor}
         >
           <path
             strokeLinecap="round"
@@ -123,10 +111,9 @@ export default function Svg({
       {type === 'icon-error' && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6 shrink-0 stroke-current"
+          className={twMerge('h-6 w-6 stroke-base-content', className)}
           fill="none"
           viewBox="0 0 24 24"
-          stroke={value === 'light' ? lightColor : darkColor}
         >
           <path
             strokeLinecap="round"
