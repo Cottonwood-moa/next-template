@@ -56,7 +56,15 @@ export default function Alert() {
                       item.type === 'error' && 'text-error',
                     )}
                   >
-                    <Svg type={`icon-${item?.type}`} />
+                    <Svg
+                      type={`icon-${item?.type}`}
+                      className={twMerge(
+                        item.type === 'info' && 'stroke-info',
+                        item.type === 'success' && 'stroke-success',
+                        item.type === 'warning' && 'stroke-warning',
+                        item.type === 'error' && 'stroke-error',
+                      )}
+                    />
                   </span>
                   <span>{item.message}</span>
                 </div>
