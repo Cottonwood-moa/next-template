@@ -41,22 +41,22 @@ const Template: NextPage = () => {
       {
         message: `${commonUtil.getRandomEmoji()}동해물과 백두산이 마르고 삼천이 보전하세.`,
         type: 'info',
-        life: 40000,
+        life: 2000,
       },
       {
         message: `${commonUtil.getRandomEmoji()}동해물과 백두산이 마르고 삼천이 보전하세.`,
         type: 'success',
-        life: 40000,
+        life: 2000,
       },
       {
         message: `${commonUtil.getRandomEmoji()}동해물과 백두산이 마르고 삼천이 보전하세.`,
         type: 'warning',
-        life: 40000,
+        life: 2000,
       },
       {
         message: `${commonUtil.getRandomEmoji()}동해물과 백두산이 마르고 삼천이 보전하세.`,
         type: 'error',
-        life: 40000,
+        life: 2000,
       },
     ]);
   };

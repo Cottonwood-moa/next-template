@@ -10,6 +10,8 @@ import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { useScroll, useIntersectionObserver } from '@react-hooks-library/core';
 import { motion } from 'framer-motion';
 import Svg from '@/components/common/Svg';
+import SideMenu from '@/components/menu/SideMenu';
+import { alertFireSelector } from '@/atom/alertAtom';
 
 export default function Home() {
   /* Loading */
@@ -24,6 +26,10 @@ export default function Home() {
   const [scroll, setScroll] = useState({ y: 0 });
   /* 최초 진입 시의 validating 인지 체크 용도 */
   const [isEndFirstValidate, setIsEndFirstValidate] = useState(false);
+  /* side menu visible */
+  const [sideMenuVisible, setSideMenuVisible] = useState(false);
+  /* alertStore */
+  const alertFire = useSetRecoilState(alertFireSelector);
   /* useScroll Hook */
   useScroll(pageRef, ({ scrollY }) => setScroll({ y: scrollY }));
   /* 
@@ -138,7 +144,7 @@ export default function Home() {
         top: toHeight,
         behavior: 'smooth',
       });
-    }, 400);
+    }, 200);
   }, []);
 
   /**
@@ -198,15 +204,34 @@ export default function Home() {
     setLayout((prev) => !prev);
   };
 
+  const keydownHandler = (e: KeyboardEvent) => {
+    if (e.key === 'b' && e.ctrlKey) {
+      setSideMenuVisible((prev) => !prev);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', keydownHandler);
+    return () => {
+      document.removeEventListener('keydown', keydownHandler);
+    };
+  }, []);
+
   return (
-    <MainLayout>
+    <MainLayout side={sideMenuVisible && <SideMenu />}>
       <div
         ref={pageRef}
         className="h-[calc(100vh-50px)] w-full items-center overflow-y-scroll bg-base-100 p-8"
       >
         <motion.div
-          initial={{ y: -300, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
+          layout
+          initial={{ y: -300 }}
+          animate={{ y: 0 }}
+          transition={{
+            type: 'spring',
+            stiffness: 220,
+            damping: 20,
+          }}
           className="mb-8 h-80 w-full max-w-[2000px] bg-slate-900"
         >
           {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
