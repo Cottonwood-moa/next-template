@@ -3,7 +3,7 @@
   ex) [id]의 index.tsx 파일 내부 storage 사용.
   
 */
-import { useState, useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from 'react';
 
 /* theme subscription */
 function themeSubscribe(callback: () => void) {

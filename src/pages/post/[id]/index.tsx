@@ -1,20 +1,23 @@
 import MainLayout from '@/components/layouts/MainLayout';
-import commonUtil from '@/utils/commonUtil';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import { useScroll } from '@react-hooks-library/core';
 import { useEffect, useRef, useState } from 'react';
 import PostHeader from '@/components/headers/PostHeader';
+import { useGetMockPostDetail } from '@/services/mockPostService';
+import { useSetRecoilState } from 'recoil';
+import { loadingStore } from '@/atom/atom';
 
 interface PostProps {
-  id: number;
+  id: string;
 }
 export default function Post({ id }: PostProps) {
-  const router = useRouter();
+  /* Loading */
+  const setLoading = useSetRecoilState(loadingStore);
   const pageRef = useRef();
   const [_scroll, setScroll] = useState({ y: 0 });
   useScroll(pageRef, ({ scrollY }) => setScroll({ y: scrollY }));
+  const { data, isLoading } = useGetMockPostDetail({ id });
 
   /* 진입 시 localStorage에 해당 post id 저장 */
   useEffect(() => {
@@ -28,24 +31,34 @@ export default function Post({ id }: PostProps) {
     }
   }, []);
 
-  const onClickRandomPost = () => {
-    router.push(`/post/${commonUtil.randomNumber(1)}`);
-  };
+  /**
+   * @description SWR loading <-> page loading 추적.
+   */
+  useEffect(() => {
+    setLoading(isLoading);
+  }, [isLoading, setLoading]);
 
   return (
-    <MainLayout postHeader={<PostHeader />}>
-      <motion.div
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="h-[100vh] w-[100vw] overflow-y-auto"
-      >
-        <div ref={pageRef} className="h-[200vh]">
-          <button type="button" className="btn" onClick={onClickRandomPost}>
-            랜덤 포스트
-          </button>
-          {id}
-        </div>
-      </motion.div>
+    <MainLayout
+      postHeader={
+        data && <PostHeader currentPost={{ id, title: data.title as string }} />
+      }
+    >
+      <div className="flex h-[100vh] w-full justify-center overflow-y-auto px-40 pb-[200px] pt-12">
+        {data && (
+          <motion.div
+            ref={pageRef}
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="w-[2000px]"
+          >
+            <div>
+              <div>{data.title}</div>
+              <div>{data.body}</div>
+            </div>
+          </motion.div>
+        )}
+      </div>
     </MainLayout>
   );
 }

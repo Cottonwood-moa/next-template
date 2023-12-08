@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import useMutation from '@/hooks/useMutation';
 import { commonRequestGet, commonRequestPost } from '../axios/axiosRequest';
 
-interface Post {
+export interface Post {
   id: string;
   title: string;
   content: string;

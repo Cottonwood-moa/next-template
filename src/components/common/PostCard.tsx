@@ -24,7 +24,7 @@ export default function PostCard({ id, type, title, body }: PostCardProps) {
           }}
           transition={{
             type: 'spring',
-            stiffness: 220,
+            stiffness: 260,
             damping: 20,
           }}
           onClick={onClickPost}
@@ -38,8 +38,8 @@ export default function PostCard({ id, type, title, body }: PostCardProps) {
             />
           </figure>
           <div className="h-[120px] bg-base-200 p-2">
-            <div className="text-xl font-bold line-clamp-2 mb-2">{title}</div>
-            <div className='line-clamp-1'>{body}</div>
+            <div className="mb-2 line-clamp-2 text-xl font-bold">{title}</div>
+            <div className="line-clamp-1">{body}</div>
           </div>
           <div className="h-[calc(100%-320px)] rounded-b-2xl bg-base-300 p-2">
             footer
@@ -56,7 +56,7 @@ export default function PostCard({ id, type, title, body }: PostCardProps) {
           }}
           transition={{
             type: 'spring',
-            stiffness: 220,
+            stiffness: 260,
             damping: 20,
           }}
           onClick={onClickPost}
@@ -68,8 +68,8 @@ export default function PostCard({ id, type, title, body }: PostCardProps) {
             alt="post"
           />
           <div className="flex-1 p-6">
-            <div className="text-xl font-bold line-clamp-1 mb-2">{title}</div>
-            <div className='line-clamp-5'>{body}</div>
+            <div className="mb-2 line-clamp-1 text-xl font-bold">{title}</div>
+            <div className="line-clamp-5">{body}</div>
           </div>
         </motion.div>
       )}

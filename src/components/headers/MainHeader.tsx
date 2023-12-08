@@ -89,13 +89,18 @@ export default function MainHeader({ theme, setTheme }: MainHeaderProps) {
   return (
     <div className="flex items-center justify-between bg-black pb-1 pl-3 pr-3 pt-1">
       {/* 왼쪽 컨텐츠 */}
-      <button
-        type="button"
-        className="btn"
-        onClick={() => router.push('/template')}
-      >
-        go to Template
-      </button>
+      <div className="flex items-center">
+        <button type="button" className="btn" onClick={() => router.push('/')}>
+          go to home
+        </button>
+        <button
+          type="button"
+          className="btn"
+          onClick={() => router.push('/template')}
+        >
+          go to Template
+        </button>
+      </div>
       <div />
       {/* 오른쪽 컨텐츠 */}
       {/* Theme 변경 아이콘 */}
@@ -107,7 +112,7 @@ export default function MainHeader({ theme, setTheme }: MainHeaderProps) {
             onClick={() => onClickSelectTheme('dark')}
           >
             {/* icon-sun */}
-            <Svg type="icon-sun" className='stroke-white'/>
+            <Svg type="icon-sun" className="stroke-white" />
           </motion.div>
         )}
         {theme === 'dark' && (
@@ -117,7 +122,7 @@ export default function MainHeader({ theme, setTheme }: MainHeaderProps) {
             onClick={() => onClickSelectTheme('light')}
           >
             {/* icon-moon */}
-            <Svg type="icon-moon" className='stroke-white'/>
+            <Svg type="icon-moon" className="stroke-white" />
           </motion.div>
         )}
         {theme !== 'dark' && theme !== 'light' && (
@@ -127,7 +132,7 @@ export default function MainHeader({ theme, setTheme }: MainHeaderProps) {
             onClick={() => onClickSelectTheme('light')}
           >
             {/* icon-point-brush */}
-            <Svg type="icon-point-brush" className='stroke-white'/>
+            <Svg type="icon-point-brush" className="stroke-white" />
           </motion.div>
         )}
         {/* Theme 변경 Dropdown */}

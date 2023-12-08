@@ -53,6 +53,22 @@ export function useGetMockPost(params: { limit: number; skip: number }) {
 }
 
 /**
+ * @description mock post detail
+ */
+export function useGetMockPostDetail(params: { id: string }) {
+  const { data, error, mutate } = useSWR<any, AxiosError<unknown>>(
+    `${process.env.NEXT_PUBLIC_DUMMY}/posts/${params.id}`,
+    commonRequestGet,
+  );
+  return {
+    data,
+    error: error?.response,
+    isLoading: !data && !error,
+    mutate,
+  };
+}
+
+/**
  * @description mock post add
  */
 export function usePostMockPost() {

@@ -1,142 +1,134 @@
-import useLocalStorageWithSync from '@/hooks/useLocalStorageWithSync';
 import { AnimatePresence, Reorder, motion } from 'framer-motion';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { useLocalStorage } from '@react-hooks-library/core';
+import { Post } from '@/services/postService';
+import { useRouter } from 'next/router';
+import Svg from '../common/Svg';
 
-export interface Ingredient {
-  icon: string;
-  label: string;
-}
+type PostTabs = Pick<Post, 'id' | 'title'>;
 
-export const allIngredients = [
-  { icon: '🍅', label: 'Tomato' },
-  { icon: '🥬', label: 'Lettuce' },
-  { icon: '🧀', label: 'Cheese' },
-  { icon: '🥕', label: 'Carrot' },
-  { icon: '🍌', label: 'Banana' },
-  { icon: '🫐', label: 'Blueberries' },
-  { icon: '🥂', label: 'Champers?' },
-];
-
-const [tomato, lettuce, cheese] = allIngredients;
-export const initialTabs = [tomato, lettuce, cheese];
-
-export function getNextIngredient(
-  ingredients: Ingredient[],
-): Ingredient | undefined {
-  const existing = new Set(ingredients);
-  return allIngredients.find((ingredient) => !existing.has(ingredient));
-}
-
-export function removeItem<T>([...arr]: T[], item: T) {
-  const index = arr.indexOf(item);
-  index > -1 && arr.splice(index, 1);
-  return arr;
-}
-
-export function closestItem<T>(arr: T[], item: T) {
-  const index = arr.indexOf(item);
-  if (index === -1) {
-    return arr[0];
-  }
-  if (index === arr.length - 1) {
-    return arr[arr.length - 2];
-  }
-  return arr[index + 1];
-}
-
-interface Props {
-  item: Ingredient;
+interface PostTabProps {
+  item: PostTabs;
   isSelected: boolean;
   onClick: () => void;
   onRemove: () => void;
 }
-
-export const Tab = ({ item, onClick, onRemove, isSelected }: Props) => (
+/* post header 종속 컴포넌트 (post tab) */
+export const PostTab = ({
+  item,
+  onClick,
+  onRemove,
+  isSelected,
+}: PostTabProps) => (
   <Reorder.Item
     value={item}
-    id={item.label}
-    initial={{ opacity: 0, y: 30 }}
-    animate={{
-      opacity: 1,
-      backgroundColor: isSelected ? '#f3f3f3' : '#fff',
-      y: 0,
-      transition: { duration: 0.15 },
-    }}
+    id={item.id}
     exit={{ opacity: 0, y: 20, transition: { duration: 0.3 } }}
-    whileDrag={{ backgroundColor: '#e3e3e3' }}
     className={twMerge(
-      isSelected ? 'selected' : '',
-      'relative flex h-[24px] w-full min-w-0 flex-1 cursor-pointer select-none items-center justify-between overflow-hidden rounded-sm bg-white p-4',
+      'relative mx-1 flex h-[24px] w-full min-w-0 max-w-[400px] flex-1 cursor-pointer select-none items-center justify-between overflow-hidden rounded-sm rounded-t-xl bg-base-200 p-4',
+      isSelected ? 'bg-base-100' : '',
     )}
-    onPointerDown={onClick}
+    onClick={(event) => {
+      event.stopPropagation();
+      onClick();
+    }}
   >
-    <motion.span layout="position">{`${item.icon} ${item.label}`}</motion.span>
+    <motion.span
+      layout="position"
+      className={twMerge('line-clamp-1', isSelected ? 'text-lg font-bold' : '')}
+    >{`${item.id}`}</motion.span>
     <motion.div
       layout
       className="absolute bottom-0 right-3 top-0 flex flex-shrink-0 items-center justify-end"
     >
       <motion.button
-        onPointerDown={(event) => {
+        onClick={(event) => {
           event.stopPropagation();
           onRemove();
         }}
         initial={false}
-        animate={{ backgroundColor: isSelected ? '#e3e3e3' : '#fff' }}
       >
-        닫기
+        <Svg type="icon-close" className="" />
       </motion.button>
     </motion.div>
   </Reorder.Item>
 );
 
-/* Componnet */
-export default function PostHeader() {
-  const [visitedPostList] = useLocalStorageWithSync('visitedPosts');
+interface PostHeaderProps {
+  currentPost: PostTabs;
+}
+/* PostHeader Component */
+export default function PostHeader({ currentPost }: PostHeaderProps) {
+  /* router */
+  const router = useRouter();
+  /* localStorage sync hook */
+  const [visitedPostList, setVisitedPostList] = useLocalStorage(
+    'visitedPosts',
+    [],
+    {
+      serialize: JSON.stringify,
+      deserialize: JSON.parse,
+    },
+  );
+  /* selected tab */
+  const [selectedTab, setSelectedTab] = useState(currentPost.id);
 
-  const [tabs, setTabs] = useState(initialTabs);
-  const [selectedTab, setSelectedTab] = useState(tabs[0]);
-
-  const remove = (item: Ingredient) => {
-    if (item === selectedTab) {
-      setSelectedTab(closestItem(tabs, item));
-    }
-
-    setTabs(removeItem(tabs, item));
+  /**
+   * @description 해당 post로 이동한다.
+   */
+  const onClickPost = (item: PostTabs) => {
+    setSelectedTab(item.id);
+    router.push(item.id);
   };
 
-  const add = () => {
-    const nextItem = getNextIngredient(tabs);
+  /**
+   * @description onRemove 메소드에 사용 (filter function)
+   */
+  const removeItem = ([...arr]: PostTabs[], item: PostTabs) => {
+    const removedList = arr.filter((post) => post.id !== item.id);
+    return removedList;
+  };
 
-    if (nextItem) {
-      setTabs([...tabs, nextItem]);
-      setSelectedTab(nextItem);
+  /**
+   * @description 열려있는 post tab 중 해당 item을 삭제한다.
+   */
+  const remove = (item: PostTabs) => {
+    const removedList = removeItem(visitedPostList, item);
+    setVisitedPostList(removedList);
+    if (removedList.length === 0) {
+      router.push('/');
+      return;
+    }
+
+    if (selectedTab === item.id) {
+      router.push(removedList[0].id);
     }
   };
 
   return (
-    <div className=" flex h-44 w-full flex-col overflow-hidden bg-amber-700">
-      <nav className="grid h-[44px] w-full overflow-hidden rounded-sm rounded-bl-none rounded-br-none border-red-600 bg-white p-2">
+    <nav className="grid w-full overflow-hidden rounded-sm rounded-bl-none rounded-br-none bg-base-300 p-2 pb-0">
+      {visitedPostList && (
         <Reorder.Group
           as="ul"
           axis="x"
-          onReorder={setTabs}
+          onReorder={setVisitedPostList}
           className="grow-1 flex w-full flex-nowrap items-end justify-start pr-[10px]"
-          values={tabs}
+          values={visitedPostList}
         >
           <AnimatePresence initial={false}>
-            {tabs.map((item) => (
-              <Tab
-                key={item.label}
+            {visitedPostList.map((item) => (
+              <PostTab
+                key={item.id}
                 item={item}
-                isSelected={selectedTab === item}
-                onClick={() => setSelectedTab(item)}
+                isSelected={selectedTab === item.id}
+                onClick={() => onClickPost(item)}
                 onRemove={() => remove(item)}
               />
             ))}
           </AnimatePresence>
         </Reorder.Group>
-      </nav>
-    </div>
+      )}
+    </nav>
   );
 }
