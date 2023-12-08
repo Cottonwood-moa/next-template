@@ -1,5 +1,11 @@
-import { useSyncExternalStore } from 'react';
+/* 
+  주의! storage를 반응형으로 사용할 때만 사용할 것. 
+  ex) [id]의 index.tsx 파일 내부 storage 사용.
+  
+*/
+import { useState, useSyncExternalStore } from 'react';
 
+/* theme subscription */
 function themeSubscribe(callback: () => void) {
   window.addEventListener('theme', callback);
   return () => {
@@ -7,12 +13,22 @@ function themeSubscribe(callback: () => void) {
   };
 }
 
+/* visited posts subscription */
+function visitedPostsSubscribe(callback: () => void) {
+  window.addEventListener('theme', callback);
+  return () => {
+    window.removeEventListener('theme', callback);
+  };
+}
+
+/* localstorage snapshot */
 function getSnapshot(key: string) {
   return localStorage.getItem(key);
 }
 
-const useLocalStorageWithSync = (key: string) => {
+const useLocalStorageWithSync = (key: 'visitedPosts' | 'theme') => {
   const subscrber = {
+    visitedPosts: visitedPostsSubscribe,
     theme: themeSubscribe,
   }[key];
 
@@ -21,9 +37,7 @@ const useLocalStorageWithSync = (key: string) => {
     () => getSnapshot(key),
     () => undefined,
   );
-
-  const value = typeof item === 'string' ? JSON.parse(item) : null;
-
+  const value = typeof item === 'string' ? JSON.parse(item) : undefined;
   const setValue = (newValue: unknown) => {
     localStorage.setItem(key, JSON.stringify(newValue));
     window.dispatchEvent(new StorageEvent(key));

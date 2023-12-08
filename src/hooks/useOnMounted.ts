@@ -11,6 +11,5 @@ export default function useOnMounted(effect: EffectCallback) {
       initialized.current = true;
       effect();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }

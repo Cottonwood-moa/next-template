@@ -218,7 +218,7 @@ export default function Home() {
   }, []);
 
   return (
-    <MainLayout side={sideMenuVisible && <SideMenu />}>
+    <MainLayout sideBar={sideMenuVisible && <SideMenu />}>
       <div
         ref={pageRef}
         className="h-[calc(100vh-50px)] w-full items-center overflow-y-scroll bg-base-100 p-8"
