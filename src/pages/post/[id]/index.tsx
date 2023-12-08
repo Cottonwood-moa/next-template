@@ -2,7 +2,7 @@ import MainLayout from '@/components/layouts/MainLayout';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { motion } from 'framer-motion';
 import { useScroll } from '@react-hooks-library/core';
-import { useEffect, useRef, useState } from 'react';
+import { ReactElement, useEffect, useRef, useState } from 'react';
 import PostHeader from '@/components/headers/PostHeader';
 import { useGetMockPostDetail } from '@/services/mockPostService';
 import { useSetRecoilState } from 'recoil';
@@ -11,7 +11,7 @@ import { loadingStore } from '@/atom/atom';
 interface PostProps {
   id: string;
 }
-export default function Post({ id }: PostProps) {
+export default function PostDetailPage({ id }: PostProps) {
   /* Loading */
   const setLoading = useSetRecoilState(loadingStore);
   const pageRef = useRef();
@@ -39,11 +39,8 @@ export default function Post({ id }: PostProps) {
   }, [isLoading, setLoading]);
 
   return (
-    <MainLayout
-      postHeader={
-        data && <PostHeader currentPost={{ id, title: data.title as string }} />
-      }
-    >
+    <>
+      {data && <PostHeader currentPost={{ id, title: data.title as string }} />}
       <div className="flex h-[100vh] w-full justify-center overflow-y-auto px-40 pb-[200px] pt-12">
         {data && (
           <motion.div
@@ -59,7 +56,7 @@ export default function Post({ id }: PostProps) {
           </motion.div>
         )}
       </div>
-    </MainLayout>
+    </>
   );
 }
 
@@ -70,3 +67,7 @@ export const getServerSideProps: GetServerSideProps = async (
     id: ctx.params?.id,
   },
 });
+
+PostDetailPage.getLayout = function getLayout(page: ReactElement) {
+  return <MainLayout>{page}</MainLayout>;
+};

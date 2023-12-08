@@ -24,9 +24,9 @@ export const PostTab = ({
   <Reorder.Item
     value={item}
     id={item.id}
-    exit={{ opacity: 0, y: 20, transition: { duration: 0.3 } }}
+    initial={{ y: 1 }}
     className={twMerge(
-      'relative mx-1 flex h-[24px] w-full min-w-0 max-w-[400px] flex-1 cursor-pointer select-none items-center justify-between overflow-hidden rounded-sm rounded-t-xl bg-base-200 p-4',
+      'relative mx-1 flex h-[24px] w-full min-w-0 max-w-[400px] flex-1 cursor-pointer select-none items-center justify-between overflow-hidden rounded-t-xl bg-base-200 p-4',
       isSelected ? 'bg-base-100' : '',
     )}
     onClick={(event) => {
@@ -38,10 +38,7 @@ export const PostTab = ({
       layout="position"
       className={twMerge('line-clamp-1', isSelected ? 'text-lg font-bold' : '')}
     >{`${item.id}`}</motion.span>
-    <motion.div
-      layout
-      className="absolute bottom-0 right-3 top-0 flex flex-shrink-0 items-center justify-end"
-    >
+    <motion.div className="absolute bottom-0 right-3 top-0 flex flex-shrink-0 items-center justify-end">
       <motion.button
         onClick={(event) => {
           event.stopPropagation();
@@ -49,7 +46,7 @@ export const PostTab = ({
         }}
         initial={false}
       >
-        <Svg type="icon-close" className="" />
+        <Svg type="icon-close" />
       </motion.button>
     </motion.div>
   </Reorder.Item>
@@ -108,16 +105,16 @@ export default function PostHeader({ currentPost }: PostHeaderProps) {
 
   return (
     <nav className="grid w-full overflow-hidden rounded-sm rounded-bl-none rounded-br-none bg-base-300 p-2 pb-0">
-      {visitedPostList && (
-        <Reorder.Group
-          as="ul"
-          axis="x"
-          onReorder={setVisitedPostList}
-          className="grow-1 flex w-full flex-nowrap items-end justify-start pr-[10px]"
-          values={visitedPostList}
-        >
-          <AnimatePresence initial={false}>
-            {visitedPostList.map((item) => (
+      <Reorder.Group
+        as="ul"
+        axis="x"
+        onReorder={setVisitedPostList}
+        className="grow-1 flex w-full flex-nowrap items-end justify-start pr-[10px]"
+        values={visitedPostList}
+      >
+        <AnimatePresence initial={false}>
+          {visitedPostList &&
+            visitedPostList.map((item) => (
               <PostTab
                 key={item.id}
                 item={item}
@@ -126,9 +123,8 @@ export default function PostHeader({ currentPost }: PostHeaderProps) {
                 onRemove={() => remove(item)}
               />
             ))}
-          </AnimatePresence>
-        </Reorder.Group>
-      )}
+        </AnimatePresence>
+      </Reorder.Group>
     </nav>
   );
 }

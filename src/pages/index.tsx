@@ -4,7 +4,7 @@ import PostCard from '@/components/common/PostCard';
 import MainLayout from '@/components/layouts/MainLayout';
 import { MockPostResponse } from '@/services/mockPostService';
 import { cloneDeep, isEmpty } from 'lodash';
-import { useRef, useCallback, useEffect, useState } from 'react';
+import { useRef, useCallback, useEffect, useState, ReactElement } from 'react';
 import { useSetRecoilState } from 'recoil';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { useScroll, useIntersectionObserver } from '@react-hooks-library/core';
@@ -26,8 +26,7 @@ export default function Home() {
   const [scroll, setScroll] = useState({ y: 0 });
   /* 최초 진입 시의 validating 인지 체크 용도 */
   const [isEndFirstValidate, setIsEndFirstValidate] = useState(false);
-  /* side menu visible */
-  const [sideMenuVisible, setSideMenuVisible] = useState(false);
+
   /* alertStore */
   const alertFire = useSetRecoilState(alertFireSelector);
   /* useScroll Hook */
@@ -138,6 +137,7 @@ export default function Home() {
     setTimeout(() => {
       // 왜 인지 모르겠지만 실제 scroll 가능한 height와 pageRef.current.scrollHeight 간에 900px 정도의 차이가 있음
       // 그래서 -900으로 안맞춰주면 다른 페이지 이동 후 되돌아 왔을 때 스크롤이 정확이 restoration 되지 않음.
+      if (!pageRef) return;
       const pageRefScrollHeight = pageRef.current.scrollHeight - 900;
       const toHeight = pageRefScrollHeight * scrollY;
       pageRef.current.scrollTo({
@@ -204,67 +204,56 @@ export default function Home() {
     setLayout((prev) => !prev);
   };
 
-  const keydownHandler = (e: KeyboardEvent) => {
-    if (e.key === 'b' && e.ctrlKey) {
-      setSideMenuVisible((prev) => !prev);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('keydown', keydownHandler);
-    return () => {
-      document.removeEventListener('keydown', keydownHandler);
-    };
-  }, []);
-
   return (
-    <MainLayout sideBar={sideMenuVisible && <SideMenu />}>
-      <div
-        ref={pageRef}
-        className="h-[calc(100vh-50px)] w-full items-center overflow-y-scroll bg-base-100 p-8"
+    <div
+      ref={pageRef}
+      className="h-[calc(100vh-50px)] w-full items-center overflow-y-scroll bg-base-100 p-8"
+    >
+      <motion.div
+        layout
+        initial={{ y: -300 }}
+        animate={{ y: 0 }}
+        transition={{
+          type: 'spring',
+          stiffness: 220,
+          damping: 20,
+        }}
+        className="mb-8 h-80 w-full max-w-[2000px] bg-slate-900"
       >
-        <motion.div
+        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <button type="button" className="btn" onClick={onClickLayoutTest}>
+          <Svg type="icon-moon" />
+        </button>
+      </motion.div>
+      <motion.div
+        className={
           layout
-          initial={{ y: -300 }}
-          animate={{ y: 0 }}
-          transition={{
-            type: 'spring',
-            stiffness: 220,
-            damping: 20,
-          }}
-          className="mb-8 h-80 w-full max-w-[2000px] bg-slate-900"
-        >
-          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-          <button type="button" className="btn" onClick={onClickLayoutTest}>
-            <Svg type="icon-moon" />
-          </button>
-        </motion.div>
-        <motion.div
-          className={
-            layout
-              ? 'grid w-full max-w-[2000px] grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
-              : 'grid w-full max-w-[2000px] grid-cols-1 gap-12'
-          }
-        >
-          {parsedPosts?.posts.map((post) => (
-            <div
-              key={post.id}
-              className="flex w-full items-center justify-center"
-            >
-              <PostCard
-                id={post.id}
-                type={layout ? 'grid' : 'list'}
-                title={post.title}
-                body={post.body}
-              />
-            </div>
-          ))}
-        </motion.div>
-        <div
-          ref={scrollTriggerRef}
-          className="opacity-1 h-10 w-full bg-red-400 opacity-0"
-        />
-      </div>
-    </MainLayout>
+            ? 'grid w-full max-w-[2000px] grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
+            : 'grid w-full max-w-[2000px] grid-cols-1 gap-12'
+        }
+      >
+        {parsedPosts?.posts.map((post) => (
+          <div
+            key={post.id}
+            className="flex w-full items-center justify-center"
+          >
+            <PostCard
+              id={post.id}
+              type={layout ? 'grid' : 'list'}
+              title={post.title}
+              body={post.body}
+            />
+          </div>
+        ))}
+      </motion.div>
+      <div
+        ref={scrollTriggerRef}
+        className="opacity-1 h-10 w-full bg-red-400 opacity-0"
+      />
+    </div>
   );
 }
+
+Home.getLayout = function getLayout(page: ReactElement) {
+  return <MainLayout>{page}</MainLayout>;
+};

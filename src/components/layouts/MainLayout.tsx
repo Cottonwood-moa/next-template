@@ -1,17 +1,34 @@
 import useLocalStorageWithSync from '@/hooks/useLocalStorageWithSync';
 import { motion } from 'framer-motion';
 import { twMerge } from 'tailwind-merge';
+import { useEffect, useState } from 'react';
 import MainHeader, { DaisyUiTheme } from '../headers/MainHeader';
 import Alert from '../common/Alert';
 import PageLoading from '../common/PageLoading';
 
 interface MainLayoutProps {
   children: React.ReactNode;
-  sideBar?: React.ReactNode;
-  postHeader?: React.ReactNode;
 }
-export default function MainLayout({ children, sideBar, postHeader }: MainLayoutProps) {
+export default function MainLayout({ children }: MainLayoutProps) {
   const [theme, setTheme] = useLocalStorageWithSync('theme');
+  /* side menu visible */
+  const [_sideMenuVisible, setSideMenuVisible] = useState(false);
+
+  /**
+   * @description side menu handler
+   */
+  const keydownHandler = (e: KeyboardEvent) => {
+    if (e.key === 'b' && e.ctrlKey) {
+      setSideMenuVisible((prev) => !prev);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', keydownHandler);
+    return () => {
+      document.removeEventListener('keydown', keydownHandler);
+    };
+  }, []);
   return (
     <div className="w-full bg-base-100">
       <PageLoading />
@@ -20,19 +37,9 @@ export default function MainLayout({ children, sideBar, postHeader }: MainLayout
         theme={theme || 'light'}
         setTheme={(newTheme: DaisyUiTheme) => setTheme(newTheme)}
       />
-      {/* post header (prop) */}
-      {postHeader && postHeader}
       <motion.div layout className={twMerge('relative w-full')}>
-        {/* side menu (prop) */}
-        {sideBar && sideBar}
         {/* main children (slot) */}
-        <motion.div
-          initial={{ x: 0 }}
-          animate={{ x: sideBar ? 100 : 0 }}
-          className={twMerge(sideBar ? 'w-[calc(100%-100px)]' : 'w-full')}
-        >
-          {children}
-        </motion.div>
+        <motion.div className={twMerge('w-full')}>{children}</motion.div>
       </motion.div>
       <Alert />
     </div>
