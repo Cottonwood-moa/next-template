@@ -10,7 +10,8 @@ import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { useScroll, useIntersectionObserver } from '@react-hooks-library/core';
 import { AnimatePresence, motion } from 'framer-motion';
 import Svg from '@/components/common/Svg';
-import { alertFireSelector } from '@/atom/alertAtom';
+import { useLocalStorage } from 'usehooks-ts';
+import { twMerge } from 'tailwind-merge';
 
 export default function Home() {
   /* Loading */
@@ -27,7 +28,11 @@ export default function Home() {
   /* 최초 진입 시의 validating 인지 체크 용도 */
   const [isEndFirstValidate, setIsEndFirstValidate] = useState(false);
   /* layout  */
+  const [storageLayout, setStorageLayout] = useLocalStorage('layout', true);
   const [layout, setLayout] = useState(true);
+  useEffect(() => {
+    setLayout(storageLayout);
+  }, [storageLayout]);
   /* alertStore */
   // const alertFire = useSetRecoilState(alertFireSelector);
   /* 
@@ -85,7 +90,7 @@ export default function Home() {
    * @description layout을 변경한다.
    */
   const onClickLayoutTest = () => {
-    setLayout((prev) => !prev);
+    setStorageLayout((prev) => !prev);
   };
 
   /**
@@ -264,12 +269,12 @@ export default function Home() {
         </motion.div>
       </div>
       {/* Post list */}
-      <motion.div
-        className={
+      <div
+        className={twMerge(
           layout
-            ? 'grid w-full max-w-[2000px] grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
-            : 'grid w-full max-w-[2000px] grid-cols-1 gap-12'
-        }
+            ? 'testgrid grid w-full max-w-[2000px] grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
+            : 'testlist grid w-full max-w-[2000px] grid-cols-1 gap-12',
+        )}
       >
         {parsedPosts?.posts.map((post) => (
           <div
@@ -284,11 +289,8 @@ export default function Home() {
             />
           </div>
         ))}
-      </motion.div>
-      <div
-        ref={scrollTriggerRef}
-        className="opacity-1 h-10 w-full bg-red-400 opacity-0"
-      />
+      </div>
+      <div ref={scrollTriggerRef} className="opacity-1 h-10 w-full opacity-0" />
     </div>
   );
 }

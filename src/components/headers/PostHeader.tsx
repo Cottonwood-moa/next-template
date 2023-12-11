@@ -107,8 +107,12 @@ export default function PostHeader({ currentPostId }: PostHeaderProps) {
 
   useEffect(() => {}, [visitedPostList]);
 
+  const closeAll = () => {
+    setVisitedPostList([]);
+    router.push('/');
+  };
   return (
-    <div className="grid w-full overflow-hidden rounded-sm rounded-bl-none rounded-br-none bg-base-300 p-2 pb-0">
+    <div className="relative grid w-full overflow-hidden rounded-sm rounded-bl-none rounded-br-none bg-base-300 p-2 pb-0">
       <Reorder.Group
         as="ul"
         axis="x"
@@ -128,6 +132,24 @@ export default function PostHeader({ currentPostId }: PostHeaderProps) {
           ))}
         </AnimatePresence>
       </Reorder.Group>
+      <AnimatePresence>
+        {visitedPostList.length > 1 && (
+          <motion.button
+            initial={{ opacity: 0, y: 100 }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              transition: { duration: 0.2, delay: 0.2 },
+            }}
+            exit={{ opacity: 0, y: 100 }}
+            className="btn absolute right-4 flex bg-base-100"
+            type="button"
+            onClick={closeAll}
+          >
+            <span>모두 닫기</span>
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
