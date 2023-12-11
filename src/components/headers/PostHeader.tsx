@@ -1,5 +1,4 @@
-import { AnimatePresence, Reorder, motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { AnimatePresence, Reorder } from 'framer-motion';
 import { twMerge } from 'tailwind-merge';
 import { Post } from '@/services/postService';
 import { useRouter } from 'next/router';
@@ -105,8 +104,6 @@ export default function PostHeader({ currentPostId }: PostHeaderProps) {
     }
   };
 
-  useEffect(() => {}, [visitedPostList]);
-
   const closeAll = () => {
     setVisitedPostList([]);
     router.push('/');
@@ -132,24 +129,15 @@ export default function PostHeader({ currentPostId }: PostHeaderProps) {
           ))}
         </AnimatePresence>
       </Reorder.Group>
-      <AnimatePresence>
-        {visitedPostList.length > 1 && (
-          <motion.button
-            initial={{ opacity: 0, y: 100 }}
-            animate={{
-              opacity: 1,
-              y: 0,
-              transition: { duration: 0.2, delay: 0.2 },
-            }}
-            exit={{ opacity: 0, y: 100 }}
-            className="btn absolute right-4 flex bg-base-100"
-            type="button"
-            onClick={closeAll}
-          >
-            <span>모두 닫기</span>
-          </motion.button>
-        )}
-      </AnimatePresence>
+      {visitedPostList.length > 1 && (
+        <button
+          className="btn absolute right-4 flex bg-base-100"
+          type="button"
+          onClick={closeAll}
+        >
+          <span>모두 닫기</span>
+        </button>
+      )}
     </div>
   );
 }
