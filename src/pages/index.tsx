@@ -10,8 +10,9 @@ import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { useScroll, useIntersectionObserver } from '@react-hooks-library/core';
 import { AnimatePresence, motion } from 'framer-motion';
 import Svg from '@/components/common/Svg';
-import { useLocalStorage } from 'usehooks-ts';
+import { useLocalStorage, useUpdateEffect } from 'usehooks-ts';
 import { twMerge } from 'tailwind-merge';
+import { alertFireSelector } from '@/atom/alertAtom';
 
 export default function Home() {
   /* Loading */
@@ -30,11 +31,9 @@ export default function Home() {
   /* layout  */
   const [storageLayout, setStorageLayout] = useLocalStorage('layout', true);
   const [layout, setLayout] = useState(true);
-  useEffect(() => {
-    setLayout(storageLayout);
-  }, [storageLayout]);
+
   /* alertStore */
-  // const alertFire = useSetRecoilState(alertFireSelector);
+  const alertFire = useSetRecoilState(alertFireSelector);
   /* 
     for render. 
     posts 에 데이터 쌓임.
@@ -142,6 +141,15 @@ export default function Home() {
     await setSize((prev) => prev + 1);
   }, [setSize, isValidating, parsedPosts]);
 
+  useUpdateEffect(() => {
+    alertFire([
+      {
+        message: `레이아웃 변경`,
+        type: 'success',
+      },
+    ]);
+    setLayout(storageLayout);
+  }, [storageLayout]);
   /**
    * @description scroll change -> sessionStorage 저장.
    */
