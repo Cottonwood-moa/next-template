@@ -8,9 +8,8 @@ import { useRef, useCallback, useEffect, useState, ReactElement } from 'react';
 import { useSetRecoilState } from 'recoil';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { useScroll, useIntersectionObserver } from '@react-hooks-library/core';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import Svg from '@/components/common/Svg';
-import SideMenu from '@/components/menu/SideMenu';
 import { alertFireSelector } from '@/atom/alertAtom';
 
 export default function Home() {
@@ -24,13 +23,13 @@ export default function Home() {
   const scrollTriggerRef = useRef(null);
   /* scroll value */
   const [scroll, setScroll] = useState({ y: 0 });
+  useScroll(pageRef, ({ scrollY }) => setScroll({ y: scrollY }));
   /* 최초 진입 시의 validating 인지 체크 용도 */
   const [isEndFirstValidate, setIsEndFirstValidate] = useState(false);
-
+  /* layout  */
+  const [layout, setLayout] = useState(true);
   /* alertStore */
-  const alertFire = useSetRecoilState(alertFireSelector);
-  /* useScroll Hook */
-  useScroll(pageRef, ({ scrollY }) => setScroll({ y: scrollY }));
+  // const alertFire = useSetRecoilState(alertFireSelector);
   /* 
     for render. 
     posts 에 데이터 쌓임.
@@ -81,6 +80,23 @@ export default function Home() {
     revalidateFirstPage: false,
     initialSize: 1,
   });
+
+  /**
+   * @description layout을 변경한다.
+   */
+  const onClickLayoutTest = () => {
+    setLayout((prev) => !prev);
+  };
+
+  /**
+   * @description 스크롤을 위로 올린다.
+   */
+  const onClickScrollUp = () => {
+    pageRef.current.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
 
   /**
    * @description post 데이터 세팅.
@@ -199,16 +215,36 @@ export default function Home() {
     setLoading(isLoading);
   }, [isLoading, setLoading]);
 
-  const [layout, setLayout] = useState(true);
-  const onClickLayoutTest = () => {
-    setLayout((prev) => !prev);
-  };
-
   return (
     <div
       ref={pageRef}
       className="h-[calc(100vh-50px)] w-full items-center overflow-y-scroll bg-base-100 p-8"
     >
+      {/* 스크롤 up */}
+      <AnimatePresence>
+        {scroll.y > 0 && (
+          <motion.div
+            initial={{ rotate: 180, scale: 0 }}
+            animate={{ rotate: 0, scale: 1 }}
+            exit={{ rotate: 180, scale: 0 }}
+            whileHover={{
+              scale: 1.04,
+            }}
+            transition={{
+              type: 'spring',
+              stiffness: 260,
+              damping: 20,
+              duration: 0.2,
+            }}
+            typeof="button"
+            className="fixed bottom-4 right-4 z-10 flex cursor-pointer items-center justify-center rounded-2xl bg-primary p-4 opacity-80"
+            onClick={onClickScrollUp}
+          >
+            <Svg type="icon-arrow-up" className="stroke-primary-content" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* 상단 배너 */}
       <motion.div
         layout
         initial={{ y: -300 }}
@@ -225,6 +261,7 @@ export default function Home() {
           <Svg type="icon-moon" />
         </button>
       </motion.div>
+      {/* Post list */}
       <motion.div
         className={
           layout

@@ -26,7 +26,10 @@ function getSnapshot(key: string) {
   return localStorage.getItem(key);
 }
 
-const useLocalStorageWithSync = (key: 'visitedPosts' | 'theme') => {
+const useLocalStorageWithSync = (
+  key: 'visitedPosts' | 'theme',
+  defaultValue: unknown,
+) => {
   const subscrber = {
     visitedPosts: visitedPostsSubscribe,
     theme: themeSubscribe,
@@ -37,7 +40,7 @@ const useLocalStorageWithSync = (key: 'visitedPosts' | 'theme') => {
     () => getSnapshot(key),
     () => undefined,
   );
-  const value = typeof item === 'string' ? JSON.parse(item) : undefined;
+  const value = typeof item === 'string' ? JSON.parse(item) : defaultValue;
   const setValue = (newValue: unknown) => {
     localStorage.setItem(key, JSON.stringify(newValue));
     window.dispatchEvent(new StorageEvent(key));

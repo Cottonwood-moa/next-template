@@ -56,7 +56,7 @@ export function useGetMockPost(params: { limit: number; skip: number }) {
  * @description mock post detail
  */
 export function useGetMockPostDetail(params: { id: string }) {
-  const { data, error, mutate } = useSWR<any, AxiosError<unknown>>(
+  const { data, error, mutate } = useSWR<unknown, AxiosError<unknown>>(
     `${process.env.NEXT_PUBLIC_DUMMY}/posts/${params.id}`,
     commonRequestGet,
   );

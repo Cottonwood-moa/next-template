@@ -1,9 +1,10 @@
 import { AnimatePresence, Reorder, motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { useLocalStorage } from '@react-hooks-library/core';
 import { Post } from '@/services/postService';
 import { useRouter } from 'next/router';
+import { useRecoilState } from 'recoil';
+import { visitedPostAtom } from '@/atom/postAtom';
 import Svg from '../common/Svg';
 
 type PostTabs = Pick<Post, 'id' | 'title'>;
@@ -36,8 +37,10 @@ export const PostTab = ({
   >
     <motion.span
       layout="position"
-      className={twMerge('line-clamp-1', isSelected ? 'text-lg font-bold' : '')}
-    >{`${item.id}`}</motion.span>
+      className={twMerge('mr-5 line-clamp-1', isSelected ? 'font-bold' : '')}
+    >
+      {item.id} {item.title}
+    </motion.span>
     <motion.div className="absolute bottom-0 right-3 top-0 flex flex-shrink-0 items-center justify-end">
       <motion.button
         onClick={(event) => {
@@ -53,23 +56,19 @@ export const PostTab = ({
 );
 
 interface PostHeaderProps {
-  currentPost: PostTabs;
+  currentPostId: string;
 }
 /* PostHeader Component */
-export default function PostHeader({ currentPost }: PostHeaderProps) {
+export default function PostHeader({ currentPostId }: PostHeaderProps) {
   /* router */
   const router = useRouter();
-  /* localStorage sync hook */
-  const [visitedPostList, setVisitedPostList] = useLocalStorage(
+  const [visitedPostList, setVisitedPostList] = useRecoilState(visitedPostAtom);
+  /*   const [visitedPostList, setVisitedPostList] = useLocalStorageWithSync(
     'visitedPosts',
     [],
-    {
-      serialize: JSON.stringify,
-      deserialize: JSON.parse,
-    },
-  );
+  ); */
   /* selected tab */
-  const [selectedTab, setSelectedTab] = useState(currentPost.id);
+  const [selectedTab, setSelectedTab] = useState(currentPostId);
 
   /**
    * @description 해당 post로 이동한다.
@@ -89,6 +88,8 @@ export default function PostHeader({ currentPost }: PostHeaderProps) {
 
   /**
    * @description 열려있는 post tab 중 해당 item을 삭제한다.
+   * 열려있는 post 가 없다면 home으로 이동한다.
+   * 열려잇는 post를 닫는다면 list의 0번째 post로 이동한다.
    */
   const remove = (item: PostTabs) => {
     const removedList = removeItem(visitedPostList, item);
@@ -103,8 +104,10 @@ export default function PostHeader({ currentPost }: PostHeaderProps) {
     }
   };
 
+  useEffect(() => {}, [visitedPostList]);
+
   return (
-    <nav className="grid w-full overflow-hidden rounded-sm rounded-bl-none rounded-br-none bg-base-300 p-2 pb-0">
+    <div className="grid w-full overflow-hidden rounded-sm rounded-bl-none rounded-br-none bg-base-300 p-2 pb-0">
       <Reorder.Group
         as="ul"
         axis="x"
@@ -113,18 +116,17 @@ export default function PostHeader({ currentPost }: PostHeaderProps) {
         values={visitedPostList}
       >
         <AnimatePresence initial={false}>
-          {visitedPostList &&
-            visitedPostList.map((item) => (
-              <PostTab
-                key={item.id}
-                item={item}
-                isSelected={selectedTab === item.id}
-                onClick={() => onClickPost(item)}
-                onRemove={() => remove(item)}
-              />
-            ))}
+          {visitedPostList.map((item) => (
+            <PostTab
+              key={item.id}
+              item={item}
+              isSelected={selectedTab === item.id}
+              onClick={() => onClickPost(item)}
+              onRemove={() => remove(item)}
+            />
+          ))}
         </AnimatePresence>
       </Reorder.Group>
-    </nav>
+    </div>
   );
 }

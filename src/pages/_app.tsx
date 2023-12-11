@@ -20,14 +20,14 @@ type AppPropsWithLayout = AppProps & {
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const router = useRouter();
-  const [value, _setValue] = useLocalStorageWithSync('theme');
+  const [value, _setValue] = useLocalStorageWithSync('theme', 'light');
   const getLayout = Component.getLayout ?? ((page) => page);
 
   // mode -> 'popLayout', 'wait', 'sync'
   return (
     <SWRConfig>
       <RecoilRoot>
-        <div data-theme={value || 'light'}>
+        <div data-theme={value}>
           <AnimatePresence mode="wait">
             {getLayout(<Component {...pageProps} key={router.asPath} />)}
           </AnimatePresence>

@@ -10,7 +10,7 @@ interface MainLayoutProps {
   children: React.ReactNode;
 }
 export default function MainLayout({ children }: MainLayoutProps) {
-  const [theme, setTheme] = useLocalStorageWithSync('theme');
+  const [theme, setTheme] = useLocalStorageWithSync('theme', 'light');
   /* side menu visible */
   const [_sideMenuVisible, setSideMenuVisible] = useState(false);
 
@@ -34,7 +34,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
       <PageLoading />
       {/* main header (고정) */}
       <MainHeader
-        theme={theme || 'light'}
+        theme={theme}
         setTheme={(newTheme: DaisyUiTheme) => setTheme(newTheme)}
       />
       <motion.div layout className={twMerge('relative w-full')}>

@@ -29,7 +29,7 @@ export default function Alert() {
 
   return (
     <Reorder.Group axis="y" values={alert} onReorder={setAlert}>
-      <div className="toast toast-end">
+      <div className="toast toast-end z-10">
         <AnimatePresence>
           {alertState.map((item) => (
             <Reorder.Item key={item.id} value={item}>
