@@ -25,33 +25,41 @@ export const PostTab = ({
   <Reorder.Item
     value={item}
     id={item.id}
-    initial={{ y: 1 }}
+    initial={{ opacity: 0, y: 30 }}
+    animate={{
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.15 },
+    }}
     className={twMerge(
-      'relative mx-1 flex h-[24px] w-full min-w-0 max-w-[400px] flex-1 cursor-pointer select-none items-center justify-between overflow-hidden rounded-t-xl bg-base-200 p-4',
-      isSelected ? 'bg-base-100' : '',
+      'relative mx-1 flex h-[48px] w-full min-w-0 max-w-[1200px] flex-1 cursor-pointer select-none justify-between overflow-hidden rounded-t-xl bg-base-200 px-4',
+      isSelected ? 'min-w-[300px] bg-base-100' : '',
     )}
     onClick={(event) => {
       event.stopPropagation();
       onClick();
     }}
   >
-    <motion.span
-      layout="position"
-      className={twMerge('mr-5 line-clamp-1', isSelected ? 'font-bold' : '')}
+    <span
+      className={twMerge(
+        'mr-5 overflow-hidden overflow-ellipsis whitespace-nowrap',
+        isSelected ? 'font-bold' : '',
+      )}
     >
       {item.id} {item.title}
-    </motion.span>
-    <motion.div className="absolute bottom-0 right-3 top-0 flex flex-shrink-0 items-center justify-end">
-      <motion.button
+    </span>
+    <div className="absolute right-3 top-[2px] flex flex-shrink-0 items-center justify-end">
+      {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+      <button
+        type="button"
         onClick={(event) => {
           event.stopPropagation();
           onRemove();
         }}
-        initial={false}
       >
         <Svg type="icon-close" />
-      </motion.button>
-    </motion.div>
+      </button>
+    </div>
   </Reorder.Item>
 );
 
@@ -63,18 +71,10 @@ export default function PostHeader({ currentPostId }: PostHeaderProps) {
   /* router */
   const router = useRouter();
   const [visitedPostList, setVisitedPostList] = useRecoilState(visitedPostAtom);
-  /*   const [visitedPostList, setVisitedPostList] = useLocalStorageWithSync(
-    'visitedPosts',
-    [],
-  ); */
-  /* selected tab */
-  const [selectedTab, setSelectedTab] = useState(currentPostId);
-
   /**
    * @description 해당 post로 이동한다.
    */
   const onClickPost = (item: PostTabs) => {
-    setSelectedTab(item.id);
     router.push(item.id);
   };
 
@@ -92,6 +92,7 @@ export default function PostHeader({ currentPostId }: PostHeaderProps) {
    * 열려잇는 post를 닫는다면 list의 0번째 post로 이동한다.
    */
   const remove = (item: PostTabs) => {
+    if (!item) return;
     const removedList = removeItem(visitedPostList, item);
     setVisitedPostList(removedList);
     if (removedList.length === 0) {
@@ -99,7 +100,7 @@ export default function PostHeader({ currentPostId }: PostHeaderProps) {
       return;
     }
 
-    if (selectedTab === item.id) {
+    if (currentPostId === item.id) {
       router.push(removedList[0].id);
     }
   };
@@ -112,7 +113,7 @@ export default function PostHeader({ currentPostId }: PostHeaderProps) {
         as="ul"
         axis="x"
         onReorder={setVisitedPostList}
-        className="grow-1 flex w-full flex-nowrap items-end justify-start pr-[10px]"
+        className="grow-1 flex w-full max-w-[1200px] flex-nowrap items-end justify-start pr-[10px]"
         values={visitedPostList}
       >
         <AnimatePresence initial={false}>
@@ -120,7 +121,7 @@ export default function PostHeader({ currentPostId }: PostHeaderProps) {
             <PostTab
               key={item.id}
               item={item}
-              isSelected={selectedTab === item.id}
+              isSelected={currentPostId === item.id}
               onClick={() => onClickPost(item)}
               onRemove={() => remove(item)}
             />

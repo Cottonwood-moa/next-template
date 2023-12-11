@@ -218,7 +218,7 @@ export default function Home() {
   return (
     <div
       ref={pageRef}
-      className="h-[calc(100vh-50px)] w-full items-center overflow-y-scroll bg-base-100 p-8"
+      className="flex h-[calc(100vh-50px)] w-full flex-col items-center overflow-y-scroll bg-base-100 p-8 "
     >
       {/* 스크롤 up */}
       <AnimatePresence>
@@ -237,7 +237,7 @@ export default function Home() {
               duration: 0.2,
             }}
             typeof="button"
-            className="fixed bottom-4 right-4 z-10 flex cursor-pointer items-center justify-center rounded-2xl bg-primary p-4 opacity-80"
+            className="fixed bottom-4 right-4 z-20 flex cursor-pointer items-center justify-center rounded-2xl bg-primary p-4 opacity-80"
             onClick={onClickScrollUp}
           >
             <Svg type="icon-arrow-up" className="stroke-primary-content" />
@@ -245,22 +245,24 @@ export default function Home() {
         )}
       </AnimatePresence>
       {/* 상단 배너 */}
-      <motion.div
-        layout
-        initial={{ y: -300 }}
-        animate={{ y: 0 }}
-        transition={{
-          type: 'spring',
-          stiffness: 220,
-          damping: 20,
-        }}
-        className="mb-8 h-80 w-full max-w-[2000px] bg-slate-900"
-      >
-        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-        <button type="button" className="btn" onClick={onClickLayoutTest}>
-          <Svg type="icon-moon" />
-        </button>
-      </motion.div>
+      <div className="flex w-full justify-center">
+        <motion.div
+          layout
+          initial={{ y: -300 }}
+          animate={{ y: 0 }}
+          transition={{
+            type: 'spring',
+            stiffness: 220,
+            damping: 20,
+          }}
+          className="mb-8 h-80 flex-1 bg-slate-900"
+        >
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <button type="button" className="btn" onClick={onClickLayoutTest}>
+            <Svg type="icon-moon" />
+          </button>
+        </motion.div>
+      </div>
       {/* Post list */}
       <motion.div
         className={
