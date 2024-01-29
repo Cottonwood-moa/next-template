@@ -2,13 +2,12 @@ import useLocalStorageWithSync from '@/hooks/useLocalStorageWithSync';
 import { motion } from 'framer-motion';
 import { twMerge } from 'tailwind-merge';
 import { useEffect, useState } from 'react';
-import MainHeader, { DaisyUiTheme } from '../headers/MainHeader';
+import { DaisyUiTheme } from '@@/components/headers/mainHeader';
+import { MainLayoutProps } from '@@/components/layouts/mainLayout';
+import MainHeader from '../headers/MainHeader';
 import Alert from '../common/Alert';
 import PageLoading from '../common/PageLoading';
 
-interface MainLayoutProps {
-  children: React.ReactNode;
-}
 export default function MainLayout({ children }: MainLayoutProps) {
   const [theme, setTheme] = useLocalStorageWithSync('theme', 'light');
   /* side menu visible */

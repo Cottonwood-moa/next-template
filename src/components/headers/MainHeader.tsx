@@ -1,46 +1,8 @@
 import { motion } from 'framer-motion';
 import { capitalize } from 'lodash';
 import { useRouter } from 'next/router';
+import { DaisyUiTheme, MainHeaderProps } from '@@/components/headers/mainHeader';
 import Svg from '../common/Svg';
-
-export type DaisyUiTheme =
-  | 'light'
-  | 'dark'
-  | 'cupcake'
-  | 'bumblebee'
-  | 'emerald'
-  | 'corporate'
-  | 'synthwave'
-  | 'retro'
-  | 'cyberpunk'
-  | 'valentine'
-  | 'halloween'
-  | 'garden'
-  | 'forest'
-  | 'aqua'
-  | 'lofi'
-  | 'pastel'
-  | 'fantasy'
-  | 'wireframe'
-  | 'black'
-  | 'luxury'
-  | 'dracula'
-  | 'cmyk'
-  | 'autumn'
-  | 'business'
-  | 'acid'
-  | 'lemonade'
-  | 'night'
-  | 'coffee'
-  | 'winter'
-  | 'dim'
-  | 'nord'
-  | 'sunset';
-
-interface MainHeaderProps {
-  theme: string;
-  setTheme: (theme: DaisyUiTheme) => void;
-}
 
 export default function MainHeader({ theme, setTheme }: MainHeaderProps) {
   const router = useRouter();

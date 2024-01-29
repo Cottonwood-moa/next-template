@@ -1,7 +1,6 @@
 import React from 'react';
-import { motion, HTMLMotionProps } from 'framer-motion';
-
-type PageTransitionProps = HTMLMotionProps<'div'>;
+import { motion } from 'framer-motion';
+import { PageTransitionProps } from '@@/components/layouts/pageTransition';
 
 function PageTransition({ children, ...rest }: PageTransitionProps) {
   const variant = {

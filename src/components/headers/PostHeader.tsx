@@ -1,19 +1,12 @@
 import { AnimatePresence, Reorder } from 'framer-motion';
 import { twMerge } from 'tailwind-merge';
-import { Post } from '@/services/postService';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { visitedPostAtom } from '@/atom/postAtom';
+import { PostTabProps, PostTabs } from '@@/components/headers/postHeader';
 import Svg from '../common/Svg';
 
-type PostTabs = Pick<Post, 'id' | 'title'>;
 
-interface PostTabProps {
-  item: PostTabs;
-  isSelected: boolean;
-  onClick: () => void;
-  onRemove: () => void;
-}
 /* post header 종속 컴포넌트 (post tab) */
 export const PostTab = ({
   item,
