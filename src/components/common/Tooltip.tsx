@@ -1,14 +1,7 @@
 import commonUtil from '@/utils/commonUtil';
 import ReactTooltip from 'react-tooltip';
 import { useEffect, useState } from 'react';
-
-interface TooltipProps {
-  message: JSX.Element | React.ReactNode | string;
-  children: React.ReactNode;
-  type?: 'dark' | 'light' | 'success' | 'warning' | 'info' | 'error';
-  direction?: 'top' | 'right' | 'left' | 'bottom';
-  effect?: 'solid' | 'float';
-}
+import { TooltipProps } from '@@/components/common/tooltip';
 
 export default function Tooltip({
   message,

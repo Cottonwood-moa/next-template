@@ -120,7 +120,6 @@ const Template: NextPageWithLayout = () => {
       ]);
     }
   }, [addPostRes, error, alertFire]);
-
   return (
     <div className="h-[100vh] w-full gap-2 overflow-y-auto">
       {/* <WordCloud

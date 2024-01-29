@@ -1,12 +1,7 @@
+import { PostCardProps } from '@@/components/common/postCard';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 
-interface PostCardProps {
-  id: number;
-  type: string;
-  title?: string;
-  body?: string;
-}
 export default function PostCard({ id, type, title, body }: PostCardProps) {
   const router = useRouter();
   const onClickPost = () => {

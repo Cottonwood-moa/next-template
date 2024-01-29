@@ -1,15 +1,6 @@
+import { DialogProps } from '@@/components/common/dialog';
 import React, { forwardRef, ForwardedRef } from 'react';
 import { twMerge } from 'tailwind-merge';
-
-interface DialogProps {
-  header?: string;
-  children?: React.ReactNode;
-  confirmLabel?: string;
-  cancelLabel?: string;
-  className?: string;
-  confirmEvent?: () => void;
-  cancelEvent?: () => void;
-}
 
 const Dialog = forwardRef(
   (

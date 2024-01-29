@@ -148,7 +148,7 @@ export default function MainHeader({ theme, setTheme }: MainHeaderProps) {
             </label>
             <ul
               tabIndex={0}
-              className="menu dropdown-content z-[1] block max-h-96 w-52 overflow-y-auto rounded-box bg-base-100 p-2 shadow"
+              className="menu dropdown-content z-20 block max-h-96 w-52 overflow-y-auto rounded-box bg-base-100 p-2 shadow"
             >
               {daisyUiThemeList.map((item) => (
                 <li key={item}>

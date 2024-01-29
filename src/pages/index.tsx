@@ -141,15 +141,10 @@ export default function Home() {
     await setSize((prev) => prev + 1);
   }, [setSize, isValidating, parsedPosts]);
 
-  useUpdateEffect(() => {
-    alertFire([
-      {
-        message: `레이아웃 변경`,
-        type: 'success',
-      },
-    ]);
+  useEffect(() => {
     setLayout(storageLayout);
   }, [storageLayout]);
+
   /**
    * @description scroll change -> sessionStorage 저장.
    */

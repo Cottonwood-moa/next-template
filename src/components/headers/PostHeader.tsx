@@ -31,7 +31,7 @@ export const PostTab = ({
       transition: { duration: 0.15 },
     }}
     className={twMerge(
-      'relative mx-1 flex h-[48px] w-full min-w-0 max-w-[1200px] flex-1 cursor-pointer select-none justify-between overflow-hidden rounded-t-xl bg-base-200 px-4',
+      'relative mx-1 flex h-[48px] w-full max-w-[1200px] flex-1 cursor-pointer select-none justify-between overflow-hidden rounded-t-xl bg-base-200 px-4',
       isSelected ? 'min-w-[300px] bg-base-100' : '',
     )}
     onClick={(event) => {
