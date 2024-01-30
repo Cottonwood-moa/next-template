@@ -1,4 +1,4 @@
-import { Post } from '@@/services/postService.model';
+import { Post } from '@@/services/postService.model'; 
 
 export type PostTabs = Pick<Post, 'id' | 'title'>;
 
