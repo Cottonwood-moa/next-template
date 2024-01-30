@@ -3,3 +3,5 @@ export interface PostProps {
   title: string;
   body: string;
 }
+// squash change1
+// squash chanage2
