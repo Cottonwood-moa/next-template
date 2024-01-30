@@ -1,5 +1,5 @@
 import { twMerge } from 'tailwind-merge';
-import { SvgProps } from '@@/components/common/svg';
+import { SvgProps } from '@@/components/common/svg.model';
 
 export default function Svg({ type, className }: SvgProps) {
   return (

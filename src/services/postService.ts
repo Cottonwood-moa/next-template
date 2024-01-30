@@ -1,14 +1,8 @@
 import { AxiosRequestConfig } from 'axios';
 import useSWR from 'swr';
 import useMutation from '@/hooks/useMutation';
+import { Post } from '@@/services/postService.model';
 import { commonRequestGet, commonRequestPost } from '../axios/axiosRequest';
-
-export interface Post {
-  id: string;
-  title: string;
-  content: string;
-  tag: string[];
-}
 /**
  * @description 포스트 리스트를 반환한다.
  * params를 컴포넌트 state로 관리하면 state가 변경되면 usePost 가 호출된다.

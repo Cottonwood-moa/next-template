@@ -3,7 +3,7 @@ import { twMerge } from 'tailwind-merge';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { visitedPostAtom } from '@/atom/postAtom';
-import { PostTabProps, PostTabs } from '@@/components/headers/postHeader';
+import { PostTabProps, PostTabs } from '@@/components/headers/postHeader.model';
 import Svg from '../common/Svg';
 
 

@@ -1,15 +1,10 @@
 import commonUtil from '@/utils/commonUtil';
+import { AlertProps } from '@@/atom/alert.model';
 import { atom, selector } from 'recoil';
 
 /**
  * @description Alert Store
  */
-export interface AlertProps {
-  id?: string;
-  message: string;
-  life?: number;
-  type: 'info' | 'success' | 'warning' | 'error';
-}
 export const alertStore = atom({
   key: `alertStore_${commonUtil.randomString(12)}`,
   default: [] as AlertProps[],

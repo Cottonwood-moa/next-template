@@ -9,7 +9,6 @@ import { useSetRecoilState } from 'recoil';
 import { useRouter } from 'next/router';
 import PageTransition from '@/components/layouts/PageTransition';
 import {
-  MockPostResponse,
   useGetMockPost,
   usePostMockPost,
 } from '@/services/mockPostService';

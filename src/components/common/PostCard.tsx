@@ -1,4 +1,4 @@
-import { PostCardProps } from '@@/components/common/postCard';
+import { PostCardProps } from '@@/components/common/postCard.model';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 

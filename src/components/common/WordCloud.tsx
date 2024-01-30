@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Text } from '@visx/text';
 import { scaleLog } from '@visx/scale';
 import Wordcloud from '@visx/wordcloud/lib/Wordcloud';
-import { SpiralType, WordCloudProps, WordData } from '@@/components/common/wordCloud';
+import { SpiralType, WordCloudProps, WordData } from '@@/components/common/wordCloud.model';
 
 export default function WordCloud({ width, height, words }: WordCloudProps) {
   const [spiralType, _setSpiralType] = useState<SpiralType>('archimedean');

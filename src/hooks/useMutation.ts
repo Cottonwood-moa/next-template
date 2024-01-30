@@ -14,12 +14,7 @@
  */
 import { useState } from 'react';
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-
-interface UseMutationState<T, F> {
-  isLoading: boolean;
-  data?: T;
-  error?: AxiosResponse<F>;
-}
+import { UseMutationState } from '@@/hooks/useMutation.model';
 
 export default function useMutation<T, F, B>(
   url: string,

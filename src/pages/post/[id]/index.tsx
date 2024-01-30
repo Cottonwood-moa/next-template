@@ -7,12 +7,8 @@ import PostHeader from '@/components/headers/PostHeader';
 import commonUtil from '@/utils/commonUtil';
 import { useRecoilState } from 'recoil';
 import { visitedPostAtom } from '@/atom/postAtom';
+import { PostProps } from '@@/pages/post/post.model';
 
-interface PostProps {
-  id: string;
-  title: string;
-  body: string;
-}
 export default function PostDetailPage({ id, title, body }: PostProps) {
   const [visitedPostList, setVisitedPostList] = useRecoilState(visitedPostAtom);
   const pageRef = useRef();

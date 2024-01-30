@@ -1,3 +1,5 @@
+import { Post } from '@@/services/postService.model';
+
 export type PostTabs = Pick<Post, 'id' | 'title'>;
 
 export interface PostTabProps {

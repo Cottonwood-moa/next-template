@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { capitalize } from 'lodash';
 import { useRouter } from 'next/router';
-import { DaisyUiTheme, MainHeaderProps } from '@@/components/headers/mainHeader';
+import { DaisyUiTheme, MainHeaderProps } from '@@/components/headers/mainHeader.model';
 import Svg from '../common/Svg';
 
 export default function MainHeader({ theme, setTheme }: MainHeaderProps) {

@@ -2,7 +2,6 @@ import { loadingStore } from '@/atom/atom';
 import { commonRequestGet } from '@/axios/axiosRequest';
 import PostCard from '@/components/common/PostCard';
 import MainLayout from '@/components/layouts/MainLayout';
-import { MockPostResponse } from '@/services/mockPostService';
 import { cloneDeep, isEmpty } from 'lodash';
 import { useRef, useCallback, useEffect, useState, ReactElement } from 'react';
 import { useSetRecoilState } from 'recoil';
@@ -13,6 +12,7 @@ import Svg from '@/components/common/Svg';
 import { useLocalStorage, useUpdateEffect } from 'usehooks-ts';
 import { twMerge } from 'tailwind-merge';
 import { alertFireSelector } from '@/atom/alertAtom';
+import { MockPostResponse } from '@@/services/mockPostService.model';
 
 export default function Home() {
   /* Loading */

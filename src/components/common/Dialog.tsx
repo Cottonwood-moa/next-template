@@ -1,4 +1,4 @@
-import { DialogProps } from '@@/components/common/dialog';
+import { DialogProps } from '@@/components/common/dialog.model';
 import React, { forwardRef, ForwardedRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 

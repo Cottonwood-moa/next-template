@@ -1,7 +1,7 @@
 import commonUtil from '@/utils/commonUtil';
 import ReactTooltip from 'react-tooltip';
 import { useEffect, useState } from 'react';
-import { TooltipProps } from '@@/components/common/tooltip';
+import { TooltipProps } from '@@/components/common/tooltip.model';
 
 export default function Tooltip({
   message,
