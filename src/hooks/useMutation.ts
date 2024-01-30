@@ -10,7 +10,7 @@
  *
  * 추가) useSwr은 에러 발생시에도 UI 에 표시되는 데이터의 안전을 보장하기 때문에 error가 발생해도 이전 data는 유지되지만
  * 다른 method는 요청 성공/실패 flag가 명확해야 하기 때문에 둘 중 하나만 가질 수 있게끔 작성되었다.
- * 요청에 성공한다면 data 존재, 에러가 발생하면 error 가 존재
+ * 요청에 성공한다면 data 존재, 에러가 발생하면 error 가 존재 
  */
 import { useState } from 'react';
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
