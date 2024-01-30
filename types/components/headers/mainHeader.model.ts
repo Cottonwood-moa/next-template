@@ -36,3 +36,5 @@ export interface MainHeaderProps {
   theme: string;
   setTheme: (theme: DaisyUiTheme) => void;
 }
+
+// master changed
